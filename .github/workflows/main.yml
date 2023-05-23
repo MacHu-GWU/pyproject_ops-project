@@ -36,8 +36,9 @@ jobs:
           set -xe
           python -VV
           python -m site
-          python -m pip install --upgrade pip setuptools wheel virtualenv poetry pytest
+          python -m pip install --upgrade pip setuptools wheel virtualenv
           python -m pip install -e .
+          python -m pip install -r requirements-test.txt
       - name: "Run test"
         run: "python -m pytest tests_int --cov=pyproject_ops"
       # don't forget to goto codecov.io, enable your repo, copy the token
