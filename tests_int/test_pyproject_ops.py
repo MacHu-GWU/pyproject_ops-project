@@ -19,6 +19,7 @@ def test():
     pyops.pip_install_all()
     pyops.run_cov_test()
     pyops.build_doc()
+    pyops.python_build()
 
 
 if __name__ == "__main__":

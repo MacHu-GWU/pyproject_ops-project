@@ -100,13 +100,6 @@ class PyProjectPaths:
         """
         return self.get_path_dynamic_bin_cli("twine")
 
-    @property
-    def path_bin_build(self) -> Path:
-        """
-        Example: ``${dir_project_root}/.venv/bin/build``
-        """
-        return self.get_path_dynamic_bin_cli("pyproject-build")
-
     # --------------------------------------------------------------------------
     # Source code
     # --------------------------------------------------------------------------

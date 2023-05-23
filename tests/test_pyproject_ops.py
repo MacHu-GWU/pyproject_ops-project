@@ -20,7 +20,6 @@ class TestPyprojectPaths:
         _ = p.path_venv_bin_pytest
         _ = p.path_bin_poetry
         _ = p.path_bin_twine
-        _ = p.path_bin_build
         _ = p.dir_tests
         _ = p.dir_htmlcov
         _ = p.dir_sphinx_doc
