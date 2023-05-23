@@ -4,9 +4,13 @@ Release and Version History
 ==============================================================================
 
 
-0.0.3 (TODO)
+0.1.1 (TODO)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
+
+- add AWS CodeArtifacts related automation
+- add AWS Lambda related automation
+- add AWS Glue related automation
 
 **Minor Improvements**
 
@@ -15,18 +19,13 @@ Release and Version History
 **Miscellaneous**
 
 
-0.0.2 (TODO)
+0.1.1a1 (2023-05-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
 
-**Minor Improvements**
-
-**Bugfixes**
-
-**Miscellaneous**
-
-
-0.0.1 (2023-05-22)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-- First release
+- add important paths enum
+- add venv management
+- add dependencies management
+- add test automation
+- add documentation build
+- add source distribution build

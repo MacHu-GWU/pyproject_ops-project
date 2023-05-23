@@ -51,8 +51,9 @@
 
 Welcome to ``pyproject_ops`` Documentation
 ==============================================================================
+This project is my personal folder structure best practice for Python project. It is a replacement of `pygitrepo <https://github.com/MacHu-GWU/pygitrepo-project>`_. The pygitrepo is primarily based on setup.py and requirements.txt file. ``pyproject_ops`` still support the old convention, and also support ``pyproject.toml`` + ``poetry``. It helps you to write less code to do Python development workflow automations. Please check the `pyproject_paths.py <./pyproject_ops/pyproject_paths.py>`_ file to see the folder structure.
 
-Documentation for ``pyproject_ops``.
+This project is hard to test, so I use the vendor pattern (include the source code of this project as it is) in my production project and keep improving it. I will release the stable version to PyPI every three months.
 
 
 .. _install:
