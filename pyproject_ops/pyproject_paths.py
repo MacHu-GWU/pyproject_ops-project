@@ -221,9 +221,9 @@ class PyProjectPaths:
     @property
     def path_requirements_main(self) -> Path:
         """
-        Example: ``${dir_project_root}/requirements-main.txt``
+        Example: ``${dir_project_root}/requirements.txt``
         """
-        return self.dir_project_root.joinpath("requirements-main.txt")
+        return self.dir_project_root.joinpath("requirements.txt")
 
     @property
     def path_requirements_dev(self) -> Path:

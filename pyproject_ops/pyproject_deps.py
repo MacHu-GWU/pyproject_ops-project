@@ -259,6 +259,9 @@ class PyProjectDeps:
         running ``pip install -r requirements-***.txt`` command. It ensures that
         those exported ``requirements-***.txt`` file exists.
         """
+        if self.path_poetry_lock.exists() is False:
+            return
+
         poetry_lock_hash = sha256_of_bytes(self.path_poetry_lock.read_bytes())
         if self._do_we_need_poetry_export(poetry_lock_hash):
             self._poetry_export(poetry_lock_hash)
