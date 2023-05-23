@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import sys
 from pathlib_mate import Path
 from pyproject_ops.api import PyProjectOps
 
 pyops = PyProjectOps(
     dir_project_root=Path.dir_here(__file__),
     package_name="pyproject_ops",
-    python_version="3.8",
+    python_version=f"{sys.version_info.major}.{sys.version_info.minor}",
 )
 
 pyops.remove_virtualenv()
