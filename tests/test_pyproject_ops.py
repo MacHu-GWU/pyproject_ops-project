@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import inspect
 from pathlib_mate import Path
 from pyproject_ops.api import PyProjectOps
 
 
-p = PyProjectOps(
+pyops = PyProjectOps(
     dir_project_root=Path.dir_here(__file__).parent,
     package_name="pyproject_ops",
     python_version="3.8",
@@ -13,88 +14,52 @@ p = PyProjectOps(
 
 class TestPyprojectPaths:
     def test(self):
-        _ = p.dir_venv
-        _ = p.dir_venv_bin
-        _ = p.path_venv_bin_python
-        _ = p.path_venv_bin_pip
-        _ = p.path_venv_bin_pytest
-        _ = p.path_bin_poetry
-        _ = p.path_bin_twine
-        _ = p.dir_tests
-        _ = p.dir_htmlcov
-        _ = p.dir_sphinx_doc
-        _ = p.dir_sphinx_doc_source
-        _ = p.dir_sphinx_doc_source_conf_py
-        _ = p.dir_sphinx_doc_source_python_lib
-        _ = p.dir_sphinx_doc_build
-        _ = p.dir_sphinx_doc_build_html
-        _ = p.path_requirements_main
-        _ = p.path_requirements_dev
-        _ = p.path_requirements_test
-        _ = p.path_requirements_doc
-        _ = p.path_requirements_automation
-        _ = p.path_poetry_lock
-        _ = p.path_poetry_lock_hash_json
-        _ = p.path_pyproject_toml
-        _ = p.dir_build
-        _ = p.dir_dist
-        _ = p.dir_build_lambda
-        _ = p.dir_build_lambda_python
-        _ = p.path_build_lambda_bin_aws
-        _ = p.path_build_lambda_source_zip
-        _ = p.path_build_lambda_layer_zip
-        _ = p.dir_lambda_app
-        _ = p.path_chalice_config
-        _ = p.dir_lambda_app_vendor
-        _ = p.dir_lambda_app_deployed
-        _ = p.path_lambda_update_chalice_config_script
-        _ = p.path_lambda_app_py
-        _ = p.dir_home
-        _ = p.dir_config
-        _ = p.path_config_json
-        _ = p.path_secret_config_json
+        for name, type_ in inspect.getmembers(PyProjectOps):
+            if isinstance(type_, property):
+                if name.startswith("dir_") or name.startswith("path_"):
+                    getattr(pyops, name)
 
 
 class PyProjectVenv:
     def test(self):
-        _ = p.create_virtualenv
-        _ = p.remove_virtualenv
+        _ = pyops.create_virtualenv
+        _ = pyops.remove_virtualenv
 
 
 class PyProjectDeps:
     def test(self):
-        _ = p.poetry_lock
-        _ = p.poetry_install
-        _ = p.poetry_install_dev
-        _ = p.poetry_install_test
-        _ = p.poetry_install_doc
-        _ = p.poetry_install_all
-        _ = p._do_we_need_poetry_export
-        _ = p._poetry_export_group
-        _ = p._poetry_export
-        _ = p.poetry_export
-        _ = p._try_poetry_export
-        _ = p.pip_install
-        _ = p.pip_install_dev
-        _ = p.pip_install_test
-        _ = p.pip_install_doc
-        _ = p.pip_install_automation
-        _ = p.pip_install_all
+        _ = pyops.poetry_lock
+        _ = pyops.poetry_install
+        _ = pyops.poetry_install_dev
+        _ = pyops.poetry_install_test
+        _ = pyops.poetry_install_doc
+        _ = pyops.poetry_install_all
+        _ = pyops._do_we_need_poetry_export
+        _ = pyops._poetry_export_group
+        _ = pyops._poetry_export
+        _ = pyops.poetry_export
+        _ = pyops._try_poetry_export
+        _ = pyops.pip_install
+        _ = pyops.pip_install_dev
+        _ = pyops.pip_install_test
+        _ = pyops.pip_install_doc
+        _ = pyops.pip_install_automation
+        _ = pyops.pip_install_all
 
 
 class PyProjectTests:
     def test(self):
-        _ = p.run_unit_test
-        _ = p.run_cov_test
+        _ = pyops.run_unit_test
+        _ = pyops.run_cov_test
 
 
 class PyProjectDocs:
     def test(self):
-        _ = p.build_doc
-        _ = p.view_doc
-        _ = p.deploy_versioned_doc
-        _ = p.deploy_latest_doc
-        _ = p.view_latest_doc
+        _ = pyops.build_doc
+        _ = pyops.view_doc
+        _ = pyops.deploy_versioned_doc
+        _ = pyops.deploy_latest_doc
+        _ = pyops.view_latest_doc
 
 
 if __name__ == "__main__":
