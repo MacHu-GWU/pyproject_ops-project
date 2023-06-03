@@ -10,7 +10,7 @@ import typing as T
 import json
 import subprocess
 import dataclasses
-from pathlib import Path
+from pathlib_mate import Path
 
 from .helpers import sha256_of_bytes
 
@@ -32,6 +32,9 @@ def _quite_pip_install(args: T.List[str]):
 
 @dataclasses.dataclass
 class PyProjectDeps:
+    """
+    Namespace class for dependencies management related automation.
+    """
     def poetry_lock(self: "PyProjectOps"):
         """
         Run:
@@ -52,7 +55,6 @@ class PyProjectDeps:
         with self.dir_project_root.temp_cwd():
             args = [f"{self.path_bin_poetry}", "lock"]
             subprocess.run(args, check=True)
-
 
     def poetry_install(self: "PyProjectOps"):
         """
@@ -149,18 +151,19 @@ class PyProjectDeps:
         )
 
     def _do_we_need_poetry_export(
-        self: "PyProjectOps", current_poetry_lock_hash: str
+        self: "PyProjectOps",
+        current_poetry_lock_hash: str,
     ) -> bool:
         """
         ``poetry export`` is an expensive command. We would like to use cache
         mechanism to avoid unnecessary export.
 
-        Everytime we run :func:`_poetry_export`, at the end, it will write the
-        sha256 hash of the ``poetry.lock`` to the ``.poetry-lock-hash.json`` cache file.
+        Everytime we run :meth:`PyProjectDeps._poetry_export`, at the end, it will write the
+        sha256 hash of the ``poetry.lock`` to the ``poetry-lock-hash.json`` cache file.
         It locates at the repo root directory. This function will compare the
         sha256 hash of the current ``poetry.lock`` to the value stored in the cache file.
         If they don't match, it means that the ``poetry.lock`` has been changed,
-        so we should run :func:`_poetry_export` again.
+        so we should run :meth:`PyProjectDeps._poetry_export` again.
 
         The content of ``.poetry-lock-hash.json`` looks like::
 
@@ -185,7 +188,36 @@ class PyProjectDeps:
             # do poetry export if the cache file not found
             return True
 
-    def _poetry_export_group(self: "PyProjectOps", group: str, path: Path):
+    def _poetry_export_main(
+        self: "PyProjectOps",
+        with_hash: bool = True,
+    ):
+        """
+        Export main dependencies to the requirements.txt file.
+
+        :param with_hash: whether to include the hash of the dependencies in the
+            requirements.txt file.
+        """
+        self.path_requirements.remove_if_exists()
+        args = [
+            f"{self.path_bin_poetry}",
+            "export",
+            "--format",
+            "requirements.txt",
+            "--output",
+            f"{self.path_requirements}",
+        ]
+        if with_hash is False:
+            args.append("--without-hashes")
+        with self.dir_project_root.temp_cwd():
+            subprocess.run(args, check=True)
+
+    def _poetry_export_group(
+        self: "PyProjectOps",
+        group: str,
+        path: Path,
+        with_hash: bool = True,
+    ):
         """
         Export dependency group to given file.
 
@@ -193,59 +225,60 @@ class PyProjectDeps:
             in the ``[tool.poetry.group.dev]`` and ``[tool.poetry.group.dev.dependencies]``
             sections of he ``pyproject.toml`` file.
         :param path: the path to the exported ``requirements.txt`` file.
+        :param with_hash: whether to include the hash of the dependencies in the
+            requirements.txt file.
         """
+        path.remove_if_exists()
         with self.dir_project_root.temp_cwd():
-            subprocess.run(
-                [
-                    f"{self.path_bin_poetry}",
-                    "export",
-                    "--format",
-                    "requirements.txt",
-                    "--output",
-                    f"{path}",
-                    "--only",
-                    group,
-                ],
-                check=True,
-            )
+            args = [
+                f"{self.path_bin_poetry}",
+                "export",
+                "--format",
+                "requirements.txt",
+                "--output",
+                f"{path}",
+                "--only",
+            ]
+            if with_hash is False:
+                args.append("--without-hashes")
+            args.append(group)
+            subprocess.run(args, check=True)
 
-    def _poetry_export(self: "PyProjectOps", current_poetry_lock_hash: str):
+    def _poetry_export(
+        self: "PyProjectOps",
+        current_poetry_lock_hash: str,
+        with_hash: bool = True,
+    ):
         """
         Run ``poetry export --format requirements.txt ...`` command and write
         the sha256 hash of the current ``poetry.lock`` file to the cache file.
 
         :param current_poetry_lock_hash: the sha256 hash of the current ``poetry.lock`` file
+        :param with_hash: whether to include the hash of the dependencies in the
+            requirements.txt file.
         """
         # export the main dependencies
-        self.path_requirements.remove_if_exists()
-        with self.dir_project_root.temp_cwd():
-            subprocess.run(
-                [
-                    f"{self.path_bin_poetry}",
-                    "export",
-                    "--format",
-                    "requirements.txt",
-                    "--output",
-                    f"{self.path_requirements}",
-                ],
-                check=True,
-            )
+        self._poetry_export_main(with_hash=with_hash)
 
-        # export dev, test, doc dependencies
+        # export dev, test, doc, auto dependencies
         for group, path in [
             ("dev", self.path_requirements_dev),
             ("test", self.path_requirements_test),
             ("doc", self.path_requirements_doc),
+            ("auto", self.path_requirements_automation),
         ]:
-            path.remove_if_exists()
-            self._poetry_export_group(group, path)
+            self._poetry_export_group(group, path, with_hash=with_hash)
 
         # write the ``poetry.lock`` hash to the cache file
         self.path_poetry_lock_hash_json.write_text(
             json.dumps(
                 {
                     "hash": current_poetry_lock_hash,
-                    "description": "DON'T edit this file manually!",
+                    "description": (
+                        "DON'T edit this file manually! This file is the cache of "
+                        "the poetry.lock file hash. It is used to avoid unnecessary "
+                        "expansive 'poetry export ...' command."
+                    ),
                 },
                 indent=4,
             )

@@ -10,20 +10,37 @@ import subprocess
 import dataclasses
 
 
-if T.TYPE_CHECKING:
+if T.TYPE_CHECKING:  # pragma: no cover
     from .ops import PyProjectOps
 
 
 @dataclasses.dataclass
 class PyProjectVenv:
     """
+    Namespace class for Virtualenv management related automation.
+
     :param python_version: example "3.7", "3.8", ...
     """
 
     python_version: str = dataclasses.field()
 
+    def _validate_python_version(self: "PyProjectOps"):
+        value_error = ValueError(
+            f"'python_version' has to be in format of '3.7', '3.8', ..."
+        )
+        if self.python_version[0] not in ["3"]:
+            raise value_error
+        if self.python_version[1] != ".":
+            raise value_error
+        if not self.python_version[2:].isdigit():
+            raise value_error
+        if int(self.python_version[2:]) < 7:
+            raise ValueError("python_version has to be >= 3.7")
+
     def create_virtualenv(self: "PyProjectOps") -> bool:
         """
+        Run:
+
         .. code-block:: bash
 
             $ virtualenv -p python${X}.${Y} ./.venv
@@ -46,9 +63,11 @@ class PyProjectVenv:
 
     def remove_virtualenv(self: "PyProjectOps") -> bool:
         """
+        Run:
+
         .. code-block:: bash
 
-            $ rm -r ./.venv
+            $ rm -r /path/to/.venv
 
         :return: a boolean flat to indicate whether a deletion is performed.
         """

@@ -29,4 +29,9 @@ class PyProjectOps(
     PyProjectAWS,
     PyProjectAWSLambda,
 ):
-    pass
+    """
+    The namespace for all the pyproject_ops automation methods.
+    """
+    def __post_init__(self):
+        self._validate_paths()
+        self._validate_python_version()
