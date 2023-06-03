@@ -196,7 +196,7 @@ class Command:
         """
         Publish package to PyPI
         """
-        pyops.poetry_build()
+        pyops.python_build()
         pyops.twine_upload()
 
 
