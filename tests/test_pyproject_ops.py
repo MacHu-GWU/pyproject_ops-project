@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pathlib_mate import Path
-from pyproject_ops.pyproject_ops import PyProjectOps
+from pyproject_ops.api import PyProjectOps
 
 
 p = PyProjectOps(

@@ -16,10 +16,10 @@ from .helpers import sha256_of_bytes
 
 
 if T.TYPE_CHECKING:
-    from .pyproject_ops import PyProjectOps
+    from .ops import PyProjectOps
 
 
-def _quite_pip_install_in_ci(args: T.List[str]):
+def _quite_pip_install(args: T.List[str]):
     """
     Add a cli argument to disable output for ``pip install`` command.
 
@@ -50,7 +50,9 @@ class PyProjectDeps:
         - poetry lock: https://python-poetry.org/docs/cli/#lock
         """
         with self.dir_project_root.temp_cwd():
-            subprocess.run([f"{self.path_bin_poetry}", "lock"])
+            args = [f"{self.path_bin_poetry}", "lock"]
+            subprocess.run(args, check=True)
+
 
     def poetry_install(self: "PyProjectOps"):
         """
@@ -64,7 +66,9 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        subprocess.run([f"{self.path_bin_poetry}", "install"], check=True)
+        with self.dir_project_root.temp_cwd():
+            args = [f"{self.path_bin_poetry}", "install"]
+            subprocess.run(args, check=True)
 
     def poetry_install_dev(self: "PyProjectOps"):
         """
@@ -78,9 +82,10 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        subprocess.run(
-            [f"{self.path_bin_poetry}", "install", "--with", "dev"], check=True
-        )
+        with self.dir_project_root.temp_cwd():
+            subprocess.run(
+                [f"{self.path_bin_poetry}", "install", "--with", "dev"], check=True
+            )
 
     def poetry_install_test(self: "PyProjectOps"):
         """
@@ -94,9 +99,10 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        subprocess.run(
-            [f"{self.path_bin_poetry}", "install", "--with", "test"], check=True
-        )
+        with self.dir_project_root.temp_cwd():
+            subprocess.run(
+                [f"{self.path_bin_poetry}", "install", "--with", "test"], check=True
+            )
 
     def poetry_install_doc(self: "PyProjectOps"):
         """
@@ -110,9 +116,10 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        subprocess.run(
-            [f"{self.path_bin_poetry}", "install", "--with", "doc"], check=True
-        )
+        with self.dir_project_root.temp_cwd():
+            subprocess.run(
+                [f"{self.path_bin_poetry}", "install", "--with", "doc"], check=True
+            )
 
     def poetry_install_all(self: "PyProjectOps"):
         """
@@ -134,7 +141,7 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements_automation}",
         ]
-        _quite_pip_install_in_ci(args)
+        _quite_pip_install(args)
         subprocess.run(args, check=True)
         subprocess.run([f"{self.path_bin_poetry}", "install"], check=True)
         subprocess.run(
@@ -187,19 +194,20 @@ class PyProjectDeps:
             sections of he ``pyproject.toml`` file.
         :param path: the path to the exported ``requirements.txt`` file.
         """
-        subprocess.run(
-            [
-                f"{self.path_bin_poetry}",
-                "export",
-                "--format",
-                "requirements.txt",
-                "--output",
-                f"{path}",
-                "--only",
-                group,
-            ],
-            check=True,
-        )
+        with self.dir_project_root.temp_cwd():
+            subprocess.run(
+                [
+                    f"{self.path_bin_poetry}",
+                    "export",
+                    "--format",
+                    "requirements.txt",
+                    "--output",
+                    f"{path}",
+                    "--only",
+                    group,
+                ],
+                check=True,
+            )
 
     def _poetry_export(self: "PyProjectOps", current_poetry_lock_hash: str):
         """
@@ -209,18 +217,19 @@ class PyProjectDeps:
         :param current_poetry_lock_hash: the sha256 hash of the current ``poetry.lock`` file
         """
         # export the main dependencies
-        self.path_requirements_main.remove_if_exists()
-        subprocess.run(
-            [
-                f"{self.path_bin_poetry}",
-                "export",
-                "--format",
-                "requirements.txt",
-                "--output",
-                f"{self.path_requirements_main}",
-            ],
-            check=True,
-        )
+        self.path_requirements.remove_if_exists()
+        with self.dir_project_root.temp_cwd():
+            subprocess.run(
+                [
+                    f"{self.path_bin_poetry}",
+                    "export",
+                    "--format",
+                    "requirements.txt",
+                    "--output",
+                    f"{self.path_requirements}",
+                ],
+                check=True,
+            )
 
         # export dev, test, doc dependencies
         for group, path in [
@@ -266,7 +275,12 @@ class PyProjectDeps:
         if self._do_we_need_poetry_export(poetry_lock_hash):
             self._poetry_export(poetry_lock_hash)
 
-    def pip_install(self: "PyProjectOps"):
+    def _run_pip_install(self, args: T.List[str], quiet: bool):
+        if quiet:
+            _quite_pip_install(args)
+        subprocess.run(args, check=True)
+
+    def pip_install(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -287,19 +301,17 @@ class PyProjectDeps:
             f"{self.dir_project_root}",
             "--no-deps",
         ]
-        _quite_pip_install_in_ci(args)
-        subprocess.run(args, check=True)
+        self._run_pip_install(args, quiet)
 
         args = [
             f"{self.path_venv_bin_pip}",
             "install",
             "-r",
-            f"{self.path_requirements_main}",
+            f"{self.path_requirements}",
         ]
-        _quite_pip_install_in_ci(args)
-        subprocess.run(args, check=True)
+        self._run_pip_install(args, quiet)
 
-    def pip_install_dev(self: "PyProjectOps"):
+    def pip_install_dev(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -315,10 +327,9 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements_dev}",
         ]
-        _quite_pip_install_in_ci(args)
-        subprocess.run(args, check=True)
+        self._run_pip_install(args, quiet)
 
-    def pip_install_test(self: "PyProjectOps"):
+    def pip_install_test(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -334,10 +345,9 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements_test}",
         ]
-        _quite_pip_install_in_ci(args)
-        subprocess.run(args, check=True)
+        self._run_pip_install(args, quiet)
 
-    def pip_install_doc(self: "PyProjectOps"):
+    def pip_install_doc(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -353,10 +363,9 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements_doc}",
         ]
-        _quite_pip_install_in_ci(args)
-        subprocess.run(args, check=True)
+        self._run_pip_install(args, quiet)
 
-    def pip_install_automation(self: "PyProjectOps"):
+    def pip_install_automation(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -370,10 +379,9 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements_automation}",
         ]
-        _quite_pip_install_in_ci(args)
-        subprocess.run(args, check=True)
+        self._run_pip_install(args, quiet)
 
-    def pip_install_all(self: "PyProjectOps"):
+    def pip_install_all(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -399,12 +407,11 @@ class PyProjectDeps:
         )
 
         for path in [
-            self.path_requirements_main,
+            self.path_requirements,
             self.path_requirements_dev,
             self.path_requirements_test,
             self.path_requirements_doc,
             self.path_requirements_automation,
         ]:
             args = [f"{self.path_venv_bin_pip}", "install", "-r", f"{path}"]
-            _quite_pip_install_in_ci(args)
-            subprocess.run(args, check=True)
+            self._run_pip_install(args, quiet)

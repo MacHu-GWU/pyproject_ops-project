@@ -9,7 +9,7 @@ import subprocess
 from .operation_system import OPEN_COMMAND
 
 if T.TYPE_CHECKING:
-    from .pyproject_ops import PyProjectOps
+    from .ops import PyProjectOps
 
 
 @dataclasses.dataclass
@@ -83,12 +83,9 @@ class PyProjectDocs:
         """
         View latest document on AWS S3.
         """
-        subprocess.run(
-            [
-                OPEN_COMMAND,
-                (
-                    f"https://{bucket}.s3.amazonaws.com/projects/{self.package_name}"
-                    f"/latest/{self.path_sphinx_doc_build_index_html.basename}"
-                ),
-            ]
+        url = (
+            f"https://{bucket}.s3.amazonaws.com/projects/{self.package_name}"
+            f"/latest/{self.path_sphinx_doc_build_index_html.basename}"
         )
+        args = [OPEN_COMMAND, url]
+        subprocess.run(args, check=True)

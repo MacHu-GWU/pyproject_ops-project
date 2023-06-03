@@ -51,10 +51,22 @@
 
 Welcome to ``pyproject_ops`` Documentation
 ==============================================================================
-This project is my personal folder structure best practice for Python project. It is a replacement of `pygitrepo <https://github.com/MacHu-GWU/pygitrepo-project>`_. The pygitrepo is primarily based on setup.py and requirements.txt file. ``pyproject_ops`` still support the old convention, and also support ``pyproject.toml`` + ``poetry``. It helps you to write less code to do Python development workflow automations. Please check the `pyproject_paths.py <./pyproject_ops/pyproject_paths.py>`_ file to see the folder structure.
+There are many different folder structures for Python project. I have my personal best practice based on Python career experience. This project is an automation tools that can do a lot of common tasks for Python project development life cycle, such as: "create virtualenv", "install dependencies", "run test", "build documentation site", etc ...
+
+A little history about this project:
+
+    I had an automation tool `pygitrepo <https://github.com/MacHu-GWU/pygitrepo-project>`_ for my old development workflow. The pygitrepo is primarily based on setup.py and requirements.txt file. ``pyproject_ops`` still support the old convention, and also support ``pyproject.toml`` + ``poetry``. It helps me to write less code to do Python development workflow automations. Please check the `pyproject_paths.py <./pyproject_ops/pyproject_paths.py>`_ file to see the folder structure.
 
 This project is hard to test, so I use the vendor pattern (include the source code of this project as it is) in my production project and keep improving it. I will release the stable version to PyPI every three months.
 
+- `pyproject_ops.py <./pyproject_ops/pyproject_ops.py>`_:
+- `pyproject_build.py <./pyproject_ops/pyproject_build.py>`_:
+- `pyproject_deps.py <./pyproject_ops/pyproject_deps.py>`_:
+- `pyproject_docs.py <./pyproject_ops/pyproject_docs.py>`_:
+- `pyproject_ops.py <./pyproject_ops/pyproject_ops.py>`_:
+- `pyproject_paths.py <./pyproject_ops/pyproject_paths.py>`_:
+- `pyproject_tests.py <./pyproject_ops/pyproject_tests.py>`_:
+- `pyproject_venv.py <./pyproject_ops/pyproject_venv.py>`_:
 
 .. _install:
 

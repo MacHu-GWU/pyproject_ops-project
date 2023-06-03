@@ -6,7 +6,7 @@ import dataclasses
 
 
 if T.TYPE_CHECKING:
-    from .pyproject_ops import PyProjectOps
+    from .ops import PyProjectOps
 
 
 @dataclasses.dataclass
@@ -32,6 +32,24 @@ class PyProjectTests:
             "--cov-report",
             f"html:{self.dir_htmlcov}",
             f"{self.dir_tests}",
+        ]
+        with self.dir_project_root.temp_cwd():
+            subprocess.run(args, check=True)
+
+    def run_int_test(self: "PyProjectOps"):
+        args = [
+            f"{self.path_venv_bin_pytest}",
+            f"{self.dir_tests_int}",
+            "-s",
+        ]
+        with self.dir_project_root.temp_cwd():
+            subprocess.run(args, check=True)
+
+    def run_load_test(self: "PyProjectOps"):
+        args = [
+            f"{self.path_venv_bin_pytest}",
+            f"{self.dir_tests_load}",
+            "-s",
         ]
         with self.dir_project_root.temp_cwd():
             subprocess.run(args, check=True)

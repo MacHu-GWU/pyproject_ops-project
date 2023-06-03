@@ -7,7 +7,7 @@ import dataclasses
 
 
 if T.TYPE_CHECKING:
-    from .pyproject_ops import PyProjectOps
+    from .ops import PyProjectOps
 
 
 @dataclasses.dataclass

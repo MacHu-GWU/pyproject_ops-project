@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+Virtualenv management related automation.
+"""
+
 import typing as T
 import shutil
 import subprocess
@@ -7,7 +11,7 @@ import dataclasses
 
 
 if T.TYPE_CHECKING:
-    from .pyproject_ops import PyProjectOps
+    from .ops import PyProjectOps
 
 
 @dataclasses.dataclass

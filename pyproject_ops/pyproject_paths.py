@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+Enumeration of important paths on local file system.
+"""
+
 import typing as T
 import sys
 import subprocess
@@ -9,13 +13,22 @@ from pathlib_mate import Path
 from .compat import cached_property
 
 if T.TYPE_CHECKING:
-    from .pyproject_ops import PyProjectOps
+    from .ops import PyProjectOps
 
 
 @dataclasses.dataclass
 class PyProjectPaths:
     dir_project_root: Path = dataclasses.field()
     package_name: str = dataclasses.field()
+
+    @cached_property
+    def dir_home(self) -> Path:
+        """
+        The user home directory.
+
+        Example: ``${HOME}``
+        """
+        return Path.home()
 
     # --------------------------------------------------------------------------
     # Virtualenv
@@ -25,6 +38,8 @@ class PyProjectPaths:
     @property
     def dir_venv(self) -> Path:
         """
+        The virtualenv directory.
+
         Example: ``${dir_project_root}/.venv``
         """
         return self.dir_project_root.joinpath(".venv")
@@ -77,7 +92,7 @@ class PyProjectPaths:
         p = self.path_sys_executable.parent.joinpath(cmd)
         if p.exists():
             return p
-        raise FileNotFoundError(f"cannot find command {cmd!r}")
+        return Path(cmd)
 
     @property
     def path_bin_virtualenv(self) -> Path:
@@ -131,9 +146,29 @@ class PyProjectPaths:
     @property
     def dir_tests(self) -> Path:
         """
+        Unit test folder.
+
         Example: ``${dir_project_root}/tests``
         """
         return self.dir_project_root.joinpath("tests")
+
+    @property
+    def dir_tests_int(self) -> Path:
+        """
+        Integration test folder.
+
+        Example: ``${dir_project_root}/tests_int``
+        """
+        return self.dir_project_root.joinpath("tests_int")
+
+    @property
+    def dir_tests_load(self) -> Path:
+        """
+        Load test folder.
+
+        Example: ``${dir_project_root}/tests_load``
+        """
+        return self.dir_project_root.joinpath("tests_load")
 
     @property
     def dir_htmlcov(self) -> Path:
@@ -194,13 +229,11 @@ class PyProjectPaths:
         """
         Example: ``${dir_project_root}/docs/build/html/index.html or README.html
         """
-        p = self.dir_sphinx_doc_build_html.joinpath("index.html")
-        if p.exists():
-            return p
+        if self.dir_sphinx_doc_source.joinpath("index.rst").exists():
+            return self.dir_sphinx_doc_build_html.joinpath("index.html")
 
-        p = self.dir_sphinx_doc_build_html.joinpath("README.html")
-        if p.exists():
-            return p
+        if self.dir_sphinx_doc_source.joinpath("README.rst").exists():
+            return self.dir_sphinx_doc_build_html.joinpath("README.html")
 
         raise FileNotFoundError(
             str(self.dir_sphinx_doc_build_html.joinpath("index.html"))
@@ -212,7 +245,7 @@ class PyProjectPaths:
     _POETRY_RELATED = None
 
     @property
-    def path_requirements_main(self) -> Path:
+    def path_requirements(self) -> Path:
         """
         Example: ``${dir_project_root}/requirements.txt``
         """
@@ -285,126 +318,3 @@ class PyProjectPaths:
         Example: ``${dir_project_root}/dist``
         """
         return self.dir_project_root.joinpath("dist")
-
-    # ------------------------------------------------------------------------------
-    # AWS Related
-    # ------------------------------------------------------------------------------
-    def path_bin_aws(self) -> Path:
-        return self.get_path_dynamic_bin_cli("aws")
-
-    # ------------------------------------------------------------------------------
-    # Lambda Related
-    # ------------------------------------------------------------------------------
-    _AWS_LAMBDA_RELATED = None
-
-    @property
-    def dir_build_lambda(self) -> Path:
-        """
-        Example: ``${dir_project_root}/build/lambda``
-        """
-        return self.dir_build.joinpath("lambda")
-
-    @property
-    def dir_build_lambda_python(self) -> Path:
-        """
-        Example: ``${dir_project_root}/build/lambda/python``
-        """
-        return self.dir_build_lambda.joinpath("python")
-
-    @property
-    def path_build_lambda_bin_aws(self) -> Path:
-        """
-        Example: ``${dir_project_root}/build/lambda/python/aws``
-        """
-        return self.dir_build_lambda_python.joinpath("aws")
-
-    @property
-    def path_build_lambda_source_zip(self) -> Path:
-        """
-        Example: ``${dir_project_root}/build/lambda/source.zip``
-        """
-        return self.dir_build_lambda.joinpath("source.zip")
-
-    @property
-    def path_build_lambda_layer_zip(self) -> Path:
-        """
-        Example: ``${dir_project_root}/build/lambda/layer.zip``
-        """
-        return self.dir_build_lambda.joinpath("layer.zip")
-
-    @property
-    def dir_lambda_app(self) -> Path:
-        """
-        Example: ``${dir_project_root}/lambda_app``
-        """
-        return self.dir_project_root.joinpath("lambda_app")
-
-    @property
-    def path_chalice_config(self) -> Path:
-        """
-        Example: ``${dir_project_root}/lambda_app/.chalice/config.json``
-        """
-        return self.dir_lambda_app.joinpath(".chalice", "config.json")
-
-    @property
-    def dir_lambda_app_vendor(self) -> Path:
-        """
-        Example: ``${dir_project_root}/lambda_app/vendor``
-        """
-        return self.dir_lambda_app.joinpath("vendor")
-
-    @property
-    def dir_lambda_app_deployed(self) -> Path:
-        """
-        Example: ``${dir_project_root}/lambda_app/.chalice/deployed``
-        """
-        return self.dir_lambda_app.joinpath(".chalice", "deployed")
-
-    @property
-    def path_lambda_update_chalice_config_script(self) -> Path:
-        """
-        Example: ``${dir_project_root}/lambda_app/update_chalice_config.py``
-        """
-        return self.dir_lambda_app.joinpath("update_chalice_config.py")
-
-    @property
-    def path_lambda_app_py(self) -> Path:
-        """
-        Example: ``${dir_project_root}/lambda_app/app.py``
-        """
-        return self.dir_lambda_app.joinpath("app.py")
-
-    # ------------------------------------------------------------------------------
-    # Config Related
-    # ------------------------------------------------------------------------------
-    _CONFIG_RELATED = None
-
-    @cached_property
-    def dir_home(self) -> Path:
-        """
-        Example: ``${HOME}``
-        """
-        return Path.home()
-
-    @property
-    def dir_config(self) -> Path:
-        """
-        Example: ``${dir_project_root}/config``
-        """
-        return self.dir_project_root.joinpath("config")
-
-    @property
-    def path_config_json(self) -> Path:
-        """
-        Example: ``${dir_project_root}/config/config.json``
-        """
-        return self.dir_config.joinpath("config.json")
-
-    @property
-    def path_secret_config_json(self) -> Path:
-        """
-        Example: ``${HOME}/.projects/${package_name}/config-secret.json``
-        """
-        return self.dir_home.joinpath(
-            ".projects", self.package_name, "config-secret.json"
-        )
