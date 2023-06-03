@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+"""
+This script extract the doc string of all path property method, and generate
+the documentation for README.rst.
+"""
+
 import typing as T
 import inspect
 from pathlib_mate import Path
 from pyproject_ops.api import PyProjectOps
-
 
 pyops = PyProjectOps(
     dir_project_root=Path.dir_here(__file__).parent,
@@ -38,6 +42,6 @@ name_and_path_and_docstr_list = list(
 for name, path, docstr in name_and_path_and_docstr_list:
     try:
         relpath = path.relative_to(pyops.dir_project_root)
-        print(f"- '{relpath}': 'PyProjectOps.{name}', {docstr!r}")
+        print(f"- ``{relpath}``: ``PyProjectOps.{name}``, {docstr}")
     except ValueError:
         pass

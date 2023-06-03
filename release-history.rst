@@ -4,13 +4,9 @@ Release and Version History
 ==============================================================================
 
 
-0.1.1 (TODO)
+Backlog (TODO)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
-
-- add AWS CodeArtifacts related automation
-- add AWS Lambda related automation
-- add AWS Glue related automation
 
 **Minor Improvements**
 
@@ -19,10 +15,11 @@ Release and Version History
 **Miscellaneous**
 
 
-0.1.1a1 (2023-05-22)
+0.1.1 (2023-05-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
 
+- reimplement all features in `pygitrepo <https://github.com/MacHu-GWU/pygitrepo-project>`_ in ``pyproject_ops``.
 - add important paths enum
 - add venv management
 - add dependencies management
