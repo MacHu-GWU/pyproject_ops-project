@@ -58,6 +58,147 @@ class Command:
         """
         pyops.remove_virtualenv()
 
+    def install(self):
+        """
+        ** Install main dependencies and Package itself
+        """
+        pyops.pip_install()
+
+    def install_dev(self):
+        """
+        Install Development Dependencies
+        """
+        pyops.pip_install_dev()
+
+    def install_test(self):
+        """
+        Install Test Dependencies
+        """
+        pyops.pip_install_test()
+
+    def install_doc(self):
+        """
+        Install Document Dependencies
+        """
+        pyops.pip_install_doc()
+
+    def install_automation(self):
+        """
+        Install Dependencies for Automation Script
+        """
+        pyops.pip_install_automation()
+
+    def install_all(self):
+        """
+        ** Install All Dependencies
+        """
+        pyops.pip_install_all()
+
+    def poetry_export(self):
+        """
+        Export requirements-*.txt from poetry.lock file
+        """
+        pyops.poetry_export()
+
+    def poetry_lock(self):
+        """
+        ** Resolve dependencies using poetry, update poetry.lock file
+        """
+        pyops.poetry_lock()
+
+    def test(self):
+        """
+        ** Run test
+        """
+        pyops.pip_install()
+        pyops.pip_install_test()
+        pyops.run_unit_test()
+
+    def test_only(self):
+        """
+        Run test without checking test dependencies
+        """
+        pyops.run_unit_test()
+
+    def cov(self):
+        """
+        ** Run code coverage test
+        """
+        pyops.pip_install()
+        pyops.pip_install_test()
+        pyops.run_cov_test()
+
+    def cov_only(self):
+        """
+        Run code coverage test without checking test dependencies
+        """
+        pyops.run_cov_test()
+
+    def int(self):
+        """
+        ** Run integration test
+        """
+        pyops.pip_install()
+        pyops.pip_install_test()
+        pyops.run_int_test()
+
+    def int_only(self):
+        """
+        Run integration test without checking test dependencies
+        """
+        pyops.run_int_test()
+
+    def build_doc(self):
+        """
+        ** Build documentation website locally
+        """
+        pyops.pip_install()
+        pyops.pip_install_doc()
+        pyops.build_doc()
+
+    def build_doc_only(self):
+        """
+        Build documentation website locally without checking doc dependencies
+        """
+        pyops.build_doc()
+
+    def view_doc(self):
+        """
+        ** View documentation website locally
+        """
+        pyops.view_doc()
+
+    def deploy_versioned_doc(self):
+        """
+        Deploy Documentation Site To S3 as Versioned Doc
+        """
+        pyops.deploy_versioned_doc(
+            bucket=pyops_config.doc_host_s3_bucket,
+            aws_profile=pyops_config.doc_host_aws_profile,
+        )
+
+    def deploy_latest_doc(self):
+        """
+        Deploy Documentation Site To S3 as Latest Doc
+        """
+        pyops.deploy_latest_doc(
+            bucket=pyops_config.doc_host_s3_bucket,
+            aws_profile=pyops_config.doc_host_aws_profile,
+        )
+
+    def view_latest_doc(self):
+        """
+        View latest documentation website on S3
+        """
+        pyops.view_latest_doc(bucket=pyops_config.doc_host_s3_bucket)
+
+    def publish(self):
+        """
+        Publish package to PyPI
+        """
+        pyops.poetry_build()
+        pyops.twine_upload()
+
 
 def main():
     fire.Fire(Command)
