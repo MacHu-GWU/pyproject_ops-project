@@ -15,6 +15,13 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.2.1 (2023-06-14)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add ``pyops view-cov`` command to view coverage test output html file locally in web browser.
+
+
 0.1.1 (2023-05-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**

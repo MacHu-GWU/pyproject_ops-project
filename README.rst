@@ -1,12 +1,12 @@
 
-.. image:: https://readthedocs.org/projects/pyproject_ops/badge/?version=latest
+.. .. image:: https://readthedocs.org/projects/pyproject_ops/badge/?version=latest
     :target: https://pyproject-ops.readthedocs.io/index.html
     :alt: Documentation Status
 
 .. image:: https://github.com/MacHu-GWU/pyproject_ops-project/workflows/CI/badge.svg
     :target: https://github.com/MacHu-GWU/pyproject_ops-project/actions?query=workflow:CI
 
-.. image:: https://codecov.io/gh/MacHu-GWU/pyproject_ops-project/branch/main/graph/badge.svg
+.. .. image:: https://codecov.io/gh/MacHu-GWU/pyproject_ops-project/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/MacHu-GWU/pyproject_ops-project
 
 .. image:: https://img.shields.io/pypi/v/pyproject_ops.svg
@@ -26,13 +26,13 @@
 
 ------
 
-.. image:: https://img.shields.io/badge/Link-Document-blue.svg
+.. .. image:: https://img.shields.io/badge/Link-Document-blue.svg
     :target: https://pyproject-ops.readthedocs.io/index.html
 
-.. image:: https://img.shields.io/badge/Link-API-blue.svg
+.. .. image:: https://img.shields.io/badge/Link-API-blue.svg
     :target: https://pyproject-ops.readthedocs.io/py-modindex.html
 
-.. image:: https://img.shields.io/badge/Link-Source_Code-blue.svg
+.. .. image:: https://img.shields.io/badge/Link-Source_Code-blue.svg
     :target: https://pyproject-ops.readthedocs.io/py-modindex.html
 
 .. image:: https://img.shields.io/badge/Link-Install-blue.svg
