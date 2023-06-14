@@ -238,6 +238,15 @@ class PyProjectPaths:
         """
         return self.dir_project_root.joinpath("htmlcov")
 
+    @property
+    def path_htmlcov_index_html(self) -> Path:
+        """
+        The code coverage test results HTML file.
+
+        Example: ``${dir_project_root}/htmlcov/index.html``
+        """
+        return self.dir_htmlcov.joinpath("index.html")
+
     # --------------------------------------------------------------------------
     # Sphinx doc
     # --------------------------------------------------------------------------

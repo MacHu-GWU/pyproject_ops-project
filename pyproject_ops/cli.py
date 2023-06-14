@@ -134,6 +134,12 @@ class Command:
         """
         pyops.run_cov_test()
 
+    def view_cov(self):
+        """
+        View coverage test output html file locally in web browser.
+        """
+        pyops.view_cov()
+
     def int(self):
         """
         ** Run integration test

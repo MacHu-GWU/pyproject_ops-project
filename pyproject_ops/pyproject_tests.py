@@ -8,6 +8,7 @@ import typing as T
 import subprocess
 import dataclasses
 
+from .operation_system import OPEN_COMMAND
 
 if T.TYPE_CHECKING:  # pragma: no cover
     from .ops import PyProjectOps
@@ -18,6 +19,7 @@ class PyProjectTests:
     """
     Namespace class for testing related automation.
     """
+
     def run_unit_test(self: "PyProjectOps"):
         """
         A wrapper of ``pytest`` command to run unit test.
@@ -49,6 +51,14 @@ class PyProjectTests:
         ]
         with self.dir_project_root.temp_cwd():
             subprocess.run(args, check=True)
+
+    def view_cov(self: "PyProjectOps"):
+        """
+        View coverage test output html file locally in web browser.
+
+        It is usually at the ``${dir_project_root}/htmlcov/index.html``
+        """
+        subprocess.run([OPEN_COMMAND, f"{self.path_htmlcov_index_html}"])
 
     def run_int_test(self: "PyProjectOps"):
         """
