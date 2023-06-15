@@ -15,6 +15,17 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.2.2 (2023-06-14)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Bugfixes**
+
+- fix a bug that ``pyops publish`` command forget to install dev dependencies.
+
+**Miscellaneous**
+
+- loosen the ``fire`` dependency version requirements to ``>=0.1.3``.
+
+
 0.2.1 (2023-06-14)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
