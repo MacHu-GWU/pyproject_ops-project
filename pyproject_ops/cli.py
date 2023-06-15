@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import typing as T
-import json
 import dataclasses
 
 import fire
@@ -202,6 +201,8 @@ class Command:
         """
         Publish package to PyPI
         """
+        pyops.pip_install()
+        pyops.pip_install_dev()
         pyops.python_build()
         pyops.twine_upload()
 
