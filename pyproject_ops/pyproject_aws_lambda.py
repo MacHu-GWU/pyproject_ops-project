@@ -100,6 +100,15 @@ class PyProjectAWSLambda:
         return self.dir_lambda_app.joinpath("vendor")
 
     @property
+    def dir_lambda_app_vendor_python_lib(self: "PyProjectOps") -> Path:
+        """
+        The source python library folder in AWS Chalice framework's vendor folder.
+
+        Example: ``${dir_project_root}/lambda_app/vendor/${package_name}``
+        """
+        return self.dir_lambda_app_vendor.joinpath(self.package_name)
+
+    @property
     def dir_lambda_app_deployed(self) -> Path:
         """
         The generated ``deployed.json`` file for AWS Chalice framework's.
@@ -130,6 +139,6 @@ class PyProjectAWSLambda:
         The lambda_function.py handler file for AWS Lambda, if you are not using
         framework.
 
-        Example: ``${dir_project_root}/lambda_app/app.py``
+        Example: ``${dir_project_root}/lambda_app/lambda_function.py``
         """
         return self.dir_lambda_app.joinpath("lambda_function.py")
