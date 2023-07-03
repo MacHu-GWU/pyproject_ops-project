@@ -79,11 +79,10 @@ Below is the folder structured used in ``pyproject_ops``. The first item is the 
 - ``.venv``: ``PyProjectOps.dir_venv``, The virtualenv directory.
 - ``.venv/bin``: ``PyProjectOps.dir_venv_bin``, The bin folder in virtualenv.
 - ``.venv/bin/pip``: ``PyProjectOps.path_venv_bin_pip``, The pip command in virtualenv.
-- ``.venv/bin/poetry``: ``PyProjectOps.path_bin_poetry``, The poetry CLI command path.
 - ``.venv/bin/pytest``: ``PyProjectOps.path_venv_bin_pytest``, The pytest command in virtualenv.
+- ``.venv/bin/python``: ``PyProjectOps.path_sys_executable``, The current Python interpreter path.
 - ``.venv/bin/python``: ``PyProjectOps.path_venv_bin_python``, The python executable in virtualenv.
 - ``.venv/bin/twine``: ``PyProjectOps.path_bin_twine``, The twine CLI command path.
-- ``.venv/bin/virtualenv``: ``PyProjectOps.path_bin_virtualenv``, The virtualenv CLI command path.
 - ``build``: ``PyProjectOps.dir_build``, The build folder for Python or artifacts build.
 - ``build/lambda``: ``PyProjectOps.dir_build_lambda``, The AWS Lambda artifacts build folder.
 - ``build/lambda/layer.zip``: ``PyProjectOps.path_build_lambda_layer_zip``, The AWS Lambda layer zip file path.
@@ -101,6 +100,7 @@ Below is the folder structured used in ``pyproject_ops``. The first item is the 
 - ``docs/source/conf.py``: ``PyProjectOps.dir_sphinx_doc_source_conf_py``, Sphinx docs ``conf.py`` file path.
 - ``docs/source/pyproject_ops``: ``PyProjectOps.dir_sphinx_doc_source_python_lib``, The generated Python library API reference Sphinx docs folder.
 - ``htmlcov``: ``PyProjectOps.dir_htmlcov``, The code coverage test results HTML output folder.
+- ``htmlcov/index.html``: ``PyProjectOps.path_htmlcov_index_html``, The code coverage test results HTML file.
 - ``lambda_app``: ``PyProjectOps.dir_lambda_app``, The AWS Lambda app handler file and Lambda related code directory.
 - ``lambda_app/.chalice/config.json``: ``PyProjectOps.path_chalice_config``, The AWS Chalice framework's config file path.
 - ``lambda_app/.chalice/deployed``: ``PyProjectOps.dir_lambda_app_deployed``, The generated ``deployed.json`` file for AWS Chalice framework's.
@@ -108,6 +108,7 @@ Below is the folder structured used in ``pyproject_ops``. The first item is the 
 - ``lambda_app/lambda_function.py``: ``PyProjectOps.path_lambda_function_py``, The lambda_function.py handler file for AWS Lambda, if you are not using
 - ``lambda_app/update_chalice_config.py``: ``PyProjectOps.path_lambda_update_chalice_config_script``, Example: ``${dir_project_root}/lambda_app/update_chalice_config.py``
 - ``lambda_app/vendor``: ``PyProjectOps.dir_lambda_app_vendor``, The vendor folder for AWS Chalice framework's packaging.
+- ``lambda_app/vendor/pyproject_ops``: ``PyProjectOps.dir_lambda_app_vendor_python_lib``, The source python library folder in AWS Chalice framework's vendor folder.
 - ``poetry-lock-hash.json``: ``PyProjectOps.path_poetry_lock_hash_json``, The poetry-lock-hash.json file path. It is the cache of the poetry.lock file hash.
 - ``poetry.lock``: ``PyProjectOps.path_poetry_lock``, The poetry.lock file path.
 - ``pyproject.toml``: ``PyProjectOps.path_pyproject_toml``, The pyproject.toml file path.
