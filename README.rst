@@ -84,6 +84,9 @@ Below is the folder structured used in ``pyproject_ops``. The first item is the 
 - ``.venv/bin/python``: ``PyProjectOps.path_venv_bin_python``, The python executable in virtualenv.
 - ``.venv/bin/twine``: ``PyProjectOps.path_bin_twine``, The twine CLI command path.
 - ``build``: ``PyProjectOps.dir_build``, The build folder for Python or artifacts build.
+- ``build/glue``: ``PyProjectOps.dir_build_glue``, The AWS glue artifacts build folder.
+- ``build/glue/extra_py_files``: ``PyProjectOps.dir_build_glue_extra_py_files``, The AWS glue extra Python files build folder.
+- ``build/glue/extra_py_files.zip``: ``PyProjectOps.path_build_glue_extra_py_files_zip``, The AWS glue extra Python files zip file path.
 - ``build/lambda``: ``PyProjectOps.dir_build_lambda``, The AWS Lambda artifacts build folder.
 - ``build/lambda/layer.zip``: ``PyProjectOps.path_build_lambda_layer_zip``, The AWS Lambda layer zip file path.
 - ``build/lambda/python``: ``PyProjectOps.dir_build_lambda_python``, The AWS Lambda layer build folder. This folder contains the dependencies.

@@ -45,6 +45,7 @@ class PyProjectDeps:
         _ = pyops.pip_install_doc
         _ = pyops.pip_install_automation
         _ = pyops.pip_install_all
+        _ = pyops.pip_install_awsglue
 
 
 class PyProjectTests:

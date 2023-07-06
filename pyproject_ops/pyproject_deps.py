@@ -35,6 +35,7 @@ class PyProjectDeps:
     """
     Namespace class for dependencies management related automation.
     """
+
     def poetry_lock(self: "PyProjectOps"):
         """
         Run:
@@ -448,3 +449,30 @@ class PyProjectDeps:
         ]:
             args = [f"{self.path_venv_bin_pip}", "install", "-r", f"{path}"]
             self._run_pip_install(args, quiet)
+
+    def pip_install_awsglue(
+        self: "PyProjectOps",
+        glue_version: str = "4.0",
+        quiet: bool = False,
+    ):
+        """
+        Pip install the awsglue Python library.
+
+        Reference:
+
+        - aws-glue-libs: https://github.com/awslabs/aws-glue-libs
+        - VCS Support - Git: https://pip.pypa.io/en/stable/topics/vcs-support/#git
+        """
+        glue_version_to_git_tag_mapper = {
+            "4.0": "v4.0",
+            "3.0": "v3.0",
+            "2.0": "v1.0-and-v2.0",
+            "1.0": "v1.0-and-v2.0",
+        }
+        git_tag = glue_version_to_git_tag_mapper[glue_version]
+        args = [
+            f"{self.path_venv_bin_pip}",
+            "install",
+            f"git+https://github.com/awslabs/aws-glue-libs.git@{git_tag}",
+        ]
+        self._run_pip_install(args, quiet)

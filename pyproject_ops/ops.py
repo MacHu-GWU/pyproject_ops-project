@@ -16,6 +16,7 @@ from .pyproject_publish import PyProjectPublish
 from .pyproject_config_management import PyProjectConfigManagement
 from .pyproject_aws import PyProjectAWS
 from .pyproject_aws_lambda import PyProjectAWSLambda
+from .pyproject_aws_glue import PyProjectAWSGlue
 
 
 @dataclasses.dataclass
@@ -30,6 +31,7 @@ class PyProjectOps(
     PyProjectConfigManagement,
     PyProjectAWS,
     PyProjectAWSLambda,
+    PyProjectAWSGlue,
 ):
     """
     The namespace for all the pyproject_ops automation methods.
