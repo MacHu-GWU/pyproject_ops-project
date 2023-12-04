@@ -45,51 +45,54 @@ pyops = PyProjectOps(
 
 
 class Command:
+    """
+    pyops command line interface.
+    """
     def venv_create(self):
         """
-        ** Create Virtual Environment
+        ** 🐍 Create Virtual Environment
         """
         pyops.create_virtualenv()
 
     def venv_remove(self):
         """
-        ** Remove Virtual Environment
+        ** 🗑 🐍 Remove Virtual Environment
         """
         pyops.remove_virtualenv()
 
     def install(self):
         """
-        ** Install main dependencies and Package itself
+        ** 💾 Install main dependencies and Package itself
         """
         pyops.pip_install()
 
     def install_dev(self):
         """
-        Install Development Dependencies
+        💾 💻 Install Development Dependencies
         """
         pyops.pip_install_dev()
 
     def install_test(self):
         """
-        Install Test Dependencies
+        💾 🧪 Install Test Dependencies
         """
         pyops.pip_install_test()
 
     def install_doc(self):
         """
-        Install Document Dependencies
+        💾 📔 Install Document Dependencies
         """
         pyops.pip_install_doc()
 
     def install_automation(self):
         """
-        Install Dependencies for Automation Script
+        💾 🤖 Install Dependencies for Automation Script
         """
         pyops.pip_install_automation()
 
     def install_all(self):
         """
-        ** Install All Dependencies
+        ** 💾 💻 🧪 📔 🤖 Install All Dependencies
         """
         pyops.pip_install_all()
 
@@ -107,7 +110,7 @@ class Command:
 
     def test(self):
         """
-        ** Run test
+        ** 🧪 Run test
         """
         pyops.pip_install()
         pyops.pip_install_test()
@@ -115,13 +118,13 @@ class Command:
 
     def test_only(self):
         """
-        Run test without checking test dependencies
+        🧪 Run test without checking test dependencies
         """
         pyops.run_unit_test()
 
     def cov(self):
         """
-        ** Run code coverage test
+        ** 🧪 Run code coverage test
         """
         pyops.pip_install()
         pyops.pip_install_test()
@@ -129,19 +132,19 @@ class Command:
 
     def cov_only(self):
         """
-        Run code coverage test without checking test dependencies
+        🧪 Run code coverage test without checking test dependencies
         """
         pyops.run_cov_test()
 
     def view_cov(self):
         """
-        View coverage test output html file locally in web browser.
+        👀 🧪 View coverage test output html file locally in web browser.
         """
         pyops.view_cov()
 
     def int(self):
         """
-        ** Run integration test
+        ** 🧪 Run integration test
         """
         pyops.pip_install()
         pyops.pip_install_test()
@@ -149,13 +152,13 @@ class Command:
 
     def int_only(self):
         """
-        Run integration test without checking test dependencies
+        🧪 Run integration test without checking test dependencies
         """
         pyops.run_int_test()
 
     def build_doc(self):
         """
-        ** Build documentation website locally
+        ** 📔 Build documentation website locally
         """
         pyops.pip_install()
         pyops.pip_install_doc()
@@ -163,19 +166,19 @@ class Command:
 
     def build_doc_only(self):
         """
-        Build documentation website locally without checking doc dependencies
+        📔 Build documentation website locally without checking doc dependencies
         """
         pyops.build_doc()
 
     def view_doc(self):
         """
-        ** View documentation website locally
+        ** 👀 📔 View documentation website locally
         """
         pyops.view_doc()
 
     def deploy_versioned_doc(self):
         """
-        Deploy Documentation Site To S3 as Versioned Doc
+        🚀 📔 Deploy Documentation Site To S3 as Versioned Doc
         """
         pyops.deploy_versioned_doc(
             bucket=pyops_config.doc_host_s3_bucket,
@@ -184,7 +187,7 @@ class Command:
 
     def deploy_latest_doc(self):
         """
-        Deploy Documentation Site To S3 as Latest Doc
+        🚀 📔 Deploy Documentation Site To S3 as Latest Doc
         """
         pyops.deploy_latest_doc(
             bucket=pyops_config.doc_host_s3_bucket,
@@ -193,13 +196,13 @@ class Command:
 
     def view_latest_doc(self):
         """
-        View latest documentation website on S3
+        👀 📔 View the latest documentation website on S3
         """
         pyops.view_latest_doc(bucket=pyops_config.doc_host_s3_bucket)
 
     def publish(self):
         """
-        Publish package to PyPI
+        📦 Publish package to PyPI
         """
         pyops.pip_install()
         pyops.pip_install_dev()
@@ -208,4 +211,4 @@ class Command:
 
 
 def main():
-    fire.Fire(Command)
+    fire.Fire(Command())
