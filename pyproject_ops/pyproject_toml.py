@@ -51,7 +51,7 @@ class PyProjectToml:
         raise an error.
         """
         if has_tomllib is False:
-            raise ImportError("tomllib or tomli is required to parse pyproject.toml")
+            raise ImportError("tomli is required to parse pyproject.toml")
         toml_dict = tomllib.loads(path_pyproject_toml.read_text())
         package_name = toml_dict["tool"]["poetry"]["name"]
         package_version = toml_dict["tool"]["poetry"]["version"]

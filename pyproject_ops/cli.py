@@ -12,6 +12,15 @@ from .ops import PyProjectOps
 
 @dataclasses.dataclass
 class PyProjectOpsConfig:
+    """
+    ``pyproject_ops.json`` file stores the configuration for ``pyproject_ops`` CLI
+    for your project.
+
+    If you don't want to use the CLI, instead you want to use pyproject_ops
+    as a Python library in your own automation script, you can create the
+    :class:`PyProjectOps` object yourself.
+    """
+
     package_name: str = dataclasses.field()
     dev_py_ver_major: int = dataclasses.field()
     dev_py_ver_minor: int = dataclasses.field()
@@ -21,6 +30,9 @@ class PyProjectOpsConfig:
 
 
 def find_pyproject_ops_json(dir_cwd: Path) -> Path:
+    """
+    Try to locate the ``pyproject_ops.json`` file by searching all the way up.
+    """
     if dir_cwd.parent == dir_cwd:
         raise FileNotFoundError(
             f"Cannot find 'pyproject_ops.json' in {dir_cwd} or its parent directory."
@@ -48,6 +60,7 @@ class Command:
     """
     pyops command line interface.
     """
+
     def venv_create(self):
         """
         ** 🐍 Create Virtual Environment
