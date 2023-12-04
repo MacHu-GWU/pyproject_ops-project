@@ -54,6 +54,7 @@
 Welcome to ``pyproject_ops`` Documentation
 ==============================================================================
 .. image:: https://github.com/MacHu-GWU/pyproject_ops-project/assets/6800411/a5c05a80-04ff-4a29-b637-021b7320f581
+    :target: https://github.com/MacHu-GWU/pyproject_ops-project
 
 
 What is this project?
