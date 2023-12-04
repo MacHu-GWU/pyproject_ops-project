@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import inspect
+
+import pytest
 from pathlib_mate import Path
 from pyproject_ops.api import PyProjectOps
 
 
-pyops = PyProjectOps(
-    dir_project_root=Path.dir_here(__file__).parent,
-    package_name="pyproject_ops",
-    python_version="3.8",
+pyops = PyProjectOps.from_pyproject_toml(
+    Path.dir_here(__file__).parent.joinpath("dummy_good_pyproject.toml"),
 )
 
 
@@ -20,13 +20,13 @@ class TestPyprojectPaths:
                     getattr(pyops, name)
 
 
-class PyProjectVenv:
+class TestPyProjectVenv:
     def test(self):
         _ = pyops.create_virtualenv
         _ = pyops.remove_virtualenv
 
 
-class PyProjectDeps:
+class TestPyProjectDeps:
     def test(self):
         _ = pyops.poetry_lock
         _ = pyops.poetry_install
@@ -48,19 +48,27 @@ class PyProjectDeps:
         _ = pyops.pip_install_awsglue
 
 
-class PyProjectTests:
+class TestPyProjectTests:
     def test(self):
         _ = pyops.run_unit_test
         _ = pyops.run_cov_test
 
 
-class PyProjectDocs:
+class TestPyProjectDocs:
     def test(self):
         _ = pyops.build_doc
         _ = pyops.view_doc
         _ = pyops.deploy_versioned_doc
         _ = pyops.deploy_latest_doc
         _ = pyops.view_latest_doc
+
+
+class TestPyProjectToml:
+    def test(self):
+        with pytest.raises(ValueError):
+            PyProjectOps.from_pyproject_toml(
+                Path.dir_here(__file__).parent.joinpath("dummy_bad_pyproject.toml"),
+            )
 
 
 if __name__ == "__main__":
