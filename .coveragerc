@@ -6,6 +6,7 @@ omit =
     pyproject_ops/tests/*
     pyproject_ops/vendor/*
     pyproject_ops/_version.py
+    pyproject_ops/cli.py
     pyproject_ops/paths.py
     pyproject_ops/compat.py
 

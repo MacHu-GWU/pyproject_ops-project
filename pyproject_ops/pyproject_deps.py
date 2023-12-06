@@ -61,7 +61,7 @@ class PyProjectDeps:
     def poetry_lock(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._poetry_lock,
             msg="Resolve Dependencies Tree",
@@ -88,7 +88,7 @@ class PyProjectDeps:
     def poetry_install(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._poetry_install,
             msg="Install main dependencies and Package itself",
@@ -116,7 +116,7 @@ class PyProjectDeps:
     def poetry_install_dev(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._poetry_install_dev,
             msg="Install dev dependencies",
@@ -144,7 +144,7 @@ class PyProjectDeps:
     def poetry_install_test(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._poetry_install_test,
             msg="Install test dependencies",
@@ -172,7 +172,7 @@ class PyProjectDeps:
     def poetry_install_doc(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._poetry_install_doc,
             msg="Install doc dependencies",
@@ -210,7 +210,7 @@ class PyProjectDeps:
     def poetry_install_all(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._poetry_install_all,
             msg="Install all dependencies for dev, test, doc",
@@ -366,7 +366,7 @@ class PyProjectDeps:
     def poetry_export(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
 
         if verbose:
 
@@ -440,7 +440,7 @@ class PyProjectDeps:
         self: "PyProjectOps",
         quiet: bool = False,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._pip_install,
             msg="Install main dependencies and Package itself",
@@ -471,7 +471,7 @@ class PyProjectDeps:
         self: "PyProjectOps",
         quiet: bool = False,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._pip_install_dev,
             msg="Install dev dependencies",
@@ -502,7 +502,7 @@ class PyProjectDeps:
         self: "PyProjectOps",
         quiet: bool = False,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._pip_install_test,
             msg="Install test dependencies",
@@ -533,7 +533,7 @@ class PyProjectDeps:
         self: "PyProjectOps",
         quiet: bool = False,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._pip_install_doc,
             msg="Install doc dependencies",
@@ -562,7 +562,7 @@ class PyProjectDeps:
         self: "PyProjectOps",
         quiet: bool = False,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._pip_install_automation,
             msg="Install automation dependencies",
@@ -610,7 +610,7 @@ class PyProjectDeps:
         self: "PyProjectOps",
         quiet: bool = False,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._pip_install_all,
             msg="Install all dependencies",
@@ -650,7 +650,7 @@ class PyProjectDeps:
         self: "PyProjectOps",
         quiet: bool = False,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._pip_install_awsglue,
             msg="Install awsglue library",

@@ -37,7 +37,7 @@ class PyProjectTests:
     def run_unit_test(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._run_unit_test,
             msg="Run Unit Test",
@@ -67,7 +67,7 @@ class PyProjectTests:
     def run_cov_test(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._run_cov_test,
             msg="Run Code Coverage Test",
@@ -86,7 +86,7 @@ class PyProjectTests:
     def view_cov(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._view_cov,
             msg="View Code Coverage Test Result",
@@ -110,7 +110,7 @@ class PyProjectTests:
     def run_int_test(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._run_int_test,
             msg="Run Integration Test",
@@ -134,7 +134,7 @@ class PyProjectTests:
     def run_load_test(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self.run_load_test,
             msg="Run Load Test",

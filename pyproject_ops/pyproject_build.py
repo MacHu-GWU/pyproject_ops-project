@@ -40,7 +40,7 @@ class PyProjectBuild:
     def python_build(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._python_build,
             msg="Build python distribution using pypa-build",
@@ -65,7 +65,7 @@ class PyProjectBuild:
     def poetry_build(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._poetry_build,
             msg="Build python distribution using poetry",

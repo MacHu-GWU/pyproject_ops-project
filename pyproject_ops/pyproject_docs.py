@@ -22,6 +22,7 @@ class PyProjectDocs:
     """
     Namespace class for document related automation.
     """
+
     def _build_doc(self: "PyProjectOps"):
         """
         Use sphinx doc to build documentation site locally. It set the
@@ -48,7 +49,7 @@ class PyProjectDocs:
     def build_doc(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._build_doc,
             msg="Build Documentation Site Locally",
@@ -67,7 +68,7 @@ class PyProjectDocs:
     def view_doc(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._view_doc,
             msg="View Documentation Site Locally",
@@ -102,7 +103,7 @@ class PyProjectDocs:
         bucket: str,
         aws_profile: T.Optional[str] = None,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._deploy_versioned_doc,
             msg="Deploy Documentation Site To S3 as Versioned Doc",
@@ -139,7 +140,7 @@ class PyProjectDocs:
         bucket: str,
         aws_profile: T.Optional[str] = None,
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         return self._with_logger(
             method=self._deploy_latest_doc,
             msg="Deploy Documentation Site To S3 as Latest Doc",

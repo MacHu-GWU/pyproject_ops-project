@@ -66,7 +66,7 @@ class PyProjectVenv:
     def create_virtualenv(
         self: "PyProjectOps",
         verbose: bool = False,
-    ) -> bool:
+    ) -> bool:  # pragma: no cover
         if verbose:
 
             @logger.start_and_end(
@@ -107,7 +107,7 @@ class PyProjectVenv:
     def remove_virtualenv(
         self: "PyProjectOps",
         verbose: bool = False,
-    ):
+    ):  # pragma: no cover
         if verbose:
 
             @logger.start_and_end(
