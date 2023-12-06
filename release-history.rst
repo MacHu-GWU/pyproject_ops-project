@@ -15,6 +15,39 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.5.1 (2023-12-06)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- the following methods now support an optional ``verbose`` parameter, if it is True, then display human friendly log messages to the console.
+    - ``pyproject_ops.api.PyProjectOps.create_virtualenv``
+    - ``pyproject_ops.api.PyProjectOps.remove_virtualenv``
+    - ``pyproject_ops.api.PyProjectOps.pip_install``
+    - ``pyproject_ops.api.PyProjectOps.pip_install_dev``
+    - ``pyproject_ops.api.PyProjectOps.pip_install_test``
+    - ``pyproject_ops.api.PyProjectOps.pip_install_doc``
+    - ``pyproject_ops.api.PyProjectOps.pip_install_automation``
+    - ``pyproject_ops.api.PyProjectOps.pip_install_all``
+    - ``pyproject_ops.api.PyProjectOps.pip_install_awsglue``
+    - ``pyproject_ops.api.PyProjectOps.poetry_lock``
+    - ``pyproject_ops.api.PyProjectOps.poetry_export``
+    - ``pyproject_ops.api.PyProjectOps.poetry_install``
+    - ``pyproject_ops.api.PyProjectOps.poetry_install_dev``
+    - ``pyproject_ops.api.PyProjectOps.poetry_install_test``
+    - ``pyproject_ops.api.PyProjectOps.poetry_install_doc``
+    - ``pyproject_ops.api.PyProjectOps.poetry_install_all``
+    - ``pyproject_ops.api.PyProjectOps.run_unit_test``
+    - ``pyproject_ops.api.PyProjectOps.run_cov_test``
+    - ``pyproject_ops.api.PyProjectOps.run_int_test``
+    - ``pyproject_ops.api.PyProjectOps.run_load_test``
+    - ``pyproject_ops.api.PyProjectOps.python_build``
+    - ``pyproject_ops.api.PyProjectOps.poetry_build``
+    - ``pyproject_ops.api.PyProjectOps.build_doc``
+    - ``pyproject_ops.api.PyProjectOps.view_doc``
+    - ``pyproject_ops.api.PyProjectOps.deploy_versioned_doc``
+    - ``pyproject_ops.api.PyProjectOps.deploy_latest_doc``
+
+
 0.4.1 (2023-12-04)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
