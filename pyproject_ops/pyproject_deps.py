@@ -378,14 +378,14 @@ class PyProjectDeps:
                 pipe=Emoji.install,
             )
             def func():
-                flag = self._poetry_install_all()
+                flag = self._poetry_export()
                 if flag is False:
                     logger.info("already did, do nothing")
                 return flag
 
             return func()
         else:
-            return self._poetry_install_all()
+            return self._poetry_export()
 
     def _try_poetry_export(self: "PyProjectOps"):
         """
@@ -398,7 +398,7 @@ class PyProjectDeps:
 
         poetry_lock_hash = sha256_of_bytes(self.path_poetry_lock.read_bytes())
         if self._do_we_need_poetry_export(poetry_lock_hash):
-            self._poetry_export(poetry_lock_hash)
+            self._poetry_export_logic(poetry_lock_hash)
 
     def _run_pip_install(self, args: T.List[str], quiet: bool):
         if quiet:
