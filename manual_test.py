@@ -9,7 +9,7 @@ py_ops = PyProjectOps(
     python_version="3.8",
 )
 
-py_ops.create_virtualenv(verbose=True)
+# py_ops.create_virtualenv(verbose=True)
 # py_ops.remove_virtualenv(verbose=True)
 # py_ops.pip_install(verbose=True)
 # py_ops.pip_install_dev(verbose=True)
@@ -28,7 +28,7 @@ py_ops.create_virtualenv(verbose=True)
 # py_ops.run_unit_test(verbose=True)
 # py_ops.run_cov_test(verbose=True)
 # py_ops.run_int_test(verbose=True)
-# py_ops.run_load_test(verbose=True)
+py_ops.run_load_test(verbose=True)
 # py_ops.python_build(verbose=True)
 # py_ops.poetry_build(verbose=True)
 # py_ops.build_doc(verbose=True)
