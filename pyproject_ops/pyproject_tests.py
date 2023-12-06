@@ -21,10 +21,15 @@ class PyProjectTests:
     Namespace class for testing related automation.
     """
 
-    def _run_unit_test(self: "PyProjectOps"):
+    def _run_unit_test(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         A wrapper of ``pytest`` command to run unit test.
         """
+        if dry_run is True:
+            return
         args = [
             f"{self.path_venv_bin_pytest}",
             f"{self.dir_tests}",
@@ -36,6 +41,7 @@ class PyProjectTests:
 
     def run_unit_test(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -43,12 +49,18 @@ class PyProjectTests:
             msg="Run Unit Test",
             emoji=Emoji.test,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _run_cov_test(self: "PyProjectOps"):
+    def _run_cov_test(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         A wrapper of ``pytest`` command to run code coverage test.
         """
+        if dry_run is True:
+            return
         args = [
             f"{self.path_venv_bin_pytest}",
             "-s",
@@ -66,6 +78,7 @@ class PyProjectTests:
 
     def run_cov_test(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -73,6 +86,7 @@ class PyProjectTests:
             msg="Run Code Coverage Test",
             emoji=Emoji.test,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
     def _view_cov(self: "PyProjectOps"):
@@ -85,6 +99,7 @@ class PyProjectTests:
 
     def view_cov(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -92,12 +107,18 @@ class PyProjectTests:
             msg="View Code Coverage Test Result",
             emoji=Emoji.test,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _run_int_test(self: "PyProjectOps"):
+    def _run_int_test(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         A wrapper of ``pytest`` command to run integration test.
         """
+        if dry_run is True:
+            return
         args = [
             f"{self.path_venv_bin_pytest}",
             f"{self.dir_tests_int}",
@@ -109,6 +130,7 @@ class PyProjectTests:
 
     def run_int_test(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -116,12 +138,18 @@ class PyProjectTests:
             msg="Run Integration Test",
             emoji=Emoji.test,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _run_load_test(self: "PyProjectOps"):
+    def _run_load_test(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         A wrapper of ``pytest`` command to run load test.
         """
+        if dry_run is True:
+            return
         args = [
             f"{self.path_venv_bin_pytest}",
             f"{self.dir_tests_load}",
@@ -133,6 +161,7 @@ class PyProjectTests:
 
     def run_load_test(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -140,4 +169,5 @@ class PyProjectTests:
             msg="Run Load Test",
             emoji=Emoji.test,
             verbose=verbose,
+            dry_run=dry_run,
         )

@@ -23,12 +23,18 @@ class PyProjectDocs:
     Namespace class for document related automation.
     """
 
-    def _build_doc(self: "PyProjectOps"):
+    def _build_doc(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Use sphinx doc to build documentation site locally. It set the
         necessary environment variables so that the ``make html`` command
         can build the HTML successfully.
         """
+        if dry_run is True:
+            return
+
         shutil.rmtree(f"{self.dir_sphinx_doc_build}", ignore_errors=True)
         shutil.rmtree(f"{self.dir_sphinx_doc_source_python_lib}", ignore_errors=True)
 
@@ -48,6 +54,7 @@ class PyProjectDocs:
 
     def build_doc(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -55,18 +62,25 @@ class PyProjectDocs:
             msg="Build Documentation Site Locally",
             emoji=Emoji.doc,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _view_doc(self: "PyProjectOps"):
+    def _view_doc(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         View documentation site built locally in web browser.
 
         It is usually at the ``${dir_project_root}/build/html/index.html``
         """
+        if dry_run is True:
+            return
         subprocess.run([OPEN_COMMAND, f"{self.path_sphinx_doc_build_index_html}"])
 
     def view_doc(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -74,12 +88,14 @@ class PyProjectDocs:
             msg="View Documentation Site Locally",
             emoji=Emoji.doc,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
     def _deploy_versioned_doc(
         self: "PyProjectOps",
         bucket: str,
         aws_profile: T.Optional[str] = None,
+        dry_run: bool = False,
     ):
         """
         Deploy versioned document to AWS S3.
@@ -87,6 +103,9 @@ class PyProjectDocs:
         The S3 bucket has to enable static website hosting. The document site
         will be uploaded to s3://${bucket}/projects/${package_name}/${package_version}/
         """
+        if dry_run is True:
+            return
+
         args = [
             f"{self.path_bin_aws}",
             "s3",
@@ -102,6 +121,7 @@ class PyProjectDocs:
         self: "PyProjectOps",
         bucket: str,
         aws_profile: T.Optional[str] = None,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -110,6 +130,7 @@ class PyProjectDocs:
             emoji=Emoji.doc,
             bucket=bucket,
             aws_profile=aws_profile,
+            dry_run=dry_run,
             verbose=verbose,
         )
 
@@ -117,6 +138,7 @@ class PyProjectDocs:
         self: "PyProjectOps",
         bucket: str,
         aws_profile: T.Optional[str] = None,
+        dry_run: bool = False,
     ):
         """
         Deploy latest document to AWS S3.
@@ -124,6 +146,9 @@ class PyProjectDocs:
         The S3 bucket has to enable static website hosting. The document site
         will be uploaded to s3://${bucket}/projects/${package_name}/latest/
         """
+        if dry_run is True:
+            return
+
         args = [
             f"{self.path_bin_aws}",
             "s3",
@@ -139,6 +164,7 @@ class PyProjectDocs:
         self: "PyProjectOps",
         bucket: str,
         aws_profile: T.Optional[str] = None,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -148,6 +174,7 @@ class PyProjectDocs:
             bucket=bucket,
             aws_profile=aws_profile,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
     def view_latest_doc(self: "PyProjectOps", bucket: str):

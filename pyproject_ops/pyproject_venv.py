@@ -39,7 +39,10 @@ class PyProjectVenv:
         if int(self.python_version[2:]) < 7:
             raise ValueError("python_version has to be >= 3.7")
 
-    def _create_virtualenv(self: "PyProjectOps") -> bool:
+    def _create_virtualenv(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ) -> bool:
         """
         Run:
 
@@ -49,6 +52,8 @@ class PyProjectVenv:
 
         :return: a boolean flat to indicate whether a creation is performed.
         """
+        if dry_run is True:
+            return False
         if self.dir_venv.exists():
             return False
         else:
@@ -65,6 +70,7 @@ class PyProjectVenv:
 
     def create_virtualenv(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ) -> bool:  # pragma: no cover
         if verbose:
@@ -77,7 +83,7 @@ class PyProjectVenv:
                 pipe=Emoji.python,
             )
             def func():
-                flag = self._create_virtualenv()
+                flag = self._create_virtualenv(dry_run=dry_run)
                 if flag:
                     logger.info("done")
                 else:
@@ -86,9 +92,12 @@ class PyProjectVenv:
 
             return func()
         else:
-            return self._create_virtualenv()
+            return self._create_virtualenv(dry_run=dry_run)
 
-    def _remove_virtualenv(self: "PyProjectOps") -> bool:
+    def _remove_virtualenv(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ) -> bool:
         """
         Run:
 
@@ -98,6 +107,8 @@ class PyProjectVenv:
 
         :return: a boolean flat to indicate whether a deletion is performed.
         """
+        if dry_run is True:
+            return False
         if self.dir_venv.exists():
             shutil.rmtree(f"{self.dir_venv}", ignore_errors=True)
             return True
@@ -106,6 +117,7 @@ class PyProjectVenv:
 
     def remove_virtualenv(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         if verbose:
@@ -118,7 +130,7 @@ class PyProjectVenv:
                 pipe=Emoji.python,
             )
             def func():
-                flag = self._remove_virtualenv()
+                flag = self._remove_virtualenv(dry_run=dry_run)
                 if flag:
                     logger.info(f"done! {self.dir_venv} is removed.")
                 else:
@@ -127,4 +139,4 @@ class PyProjectVenv:
 
             return func()
         else:
-            return self._remove_virtualenv()
+            return self._remove_virtualenv(dry_run=dry_run)

@@ -24,11 +24,16 @@ class PyProjectBuild:
     Namespace class for build related automation.
     """
 
-    def _python_build(self: "PyProjectOps"):
+    def _python_build(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Build python source distribution using
         `pypa-build <https://pypa-build.readthedocs.io/en/latest/>`_.
         """
+        if dry_run is True:
+            return
         if self.dir_dist.exists():
             shutil.rmtree(self.dir_dist, ignore_errors=True)
         build_dist_with_python_build(
@@ -39,6 +44,7 @@ class PyProjectBuild:
 
     def python_build(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -46,14 +52,20 @@ class PyProjectBuild:
             msg="Build python distribution using pypa-build",
             emoji=Emoji.build,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _poetry_build(self: "PyProjectOps"):
+    def _poetry_build(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Build python source distribution using
 
         `poetry build <https://python-poetry.org/docs/cli/#build>`_.
         """
+        if dry_run is True:
+            return
         if self.dir_dist.exists():
             shutil.rmtree(self.dir_dist, ignore_errors=True)
         build_dist_with_poetry_build(
@@ -64,6 +76,7 @@ class PyProjectBuild:
 
     def poetry_build(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -71,4 +84,5 @@ class PyProjectBuild:
             msg="Build python distribution using poetry",
             emoji=Emoji.build,
             verbose=verbose,
+            dry_run=dry_run,
         )

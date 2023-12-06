@@ -37,7 +37,10 @@ class PyProjectDeps:
     Namespace class for dependencies management related automation.
     """
 
-    def _poetry_lock(self: "PyProjectOps"):
+    def _poetry_lock(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -54,12 +57,15 @@ class PyProjectDeps:
 
         - poetry lock: https://python-poetry.org/docs/cli/#lock
         """
+        if dry_run is True:
+            return
         with self.dir_project_root.temp_cwd():
             args = [f"{self.path_bin_poetry}", "lock"]
             subprocess.run(args, check=True)
 
     def poetry_lock(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -67,9 +73,13 @@ class PyProjectDeps:
             msg="Resolve Dependencies Tree",
             emoji=Emoji.install,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _poetry_install(self: "PyProjectOps"):
+    def _poetry_install(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -81,12 +91,15 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
+        if dry_run is True:
+            return
         with self.dir_project_root.temp_cwd():
             args = [f"{self.path_bin_poetry}", "install"]
             subprocess.run(args, check=True)
 
     def poetry_install(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -94,9 +107,13 @@ class PyProjectDeps:
             msg="Install main dependencies and Package itself",
             emoji=Emoji.install,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _poetry_install_dev(self: "PyProjectOps"):
+    def _poetry_install_dev(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -108,6 +125,8 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
+        if dry_run is True:
+            return
         with self.dir_project_root.temp_cwd():
             subprocess.run(
                 [f"{self.path_bin_poetry}", "install", "--with", "dev"], check=True
@@ -115,6 +134,7 @@ class PyProjectDeps:
 
     def poetry_install_dev(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -122,9 +142,13 @@ class PyProjectDeps:
             msg="Install dev dependencies",
             emoji=Emoji.install,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _poetry_install_test(self: "PyProjectOps"):
+    def _poetry_install_test(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -136,6 +160,8 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
+        if dry_run is True:
+            return
         with self.dir_project_root.temp_cwd():
             subprocess.run(
                 [f"{self.path_bin_poetry}", "install", "--with", "test"], check=True
@@ -143,6 +169,7 @@ class PyProjectDeps:
 
     def poetry_install_test(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -150,9 +177,13 @@ class PyProjectDeps:
             msg="Install test dependencies",
             emoji=Emoji.install,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _poetry_install_doc(self: "PyProjectOps"):
+    def _poetry_install_doc(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -164,6 +195,8 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
+        if dry_run is True:
+            return
         with self.dir_project_root.temp_cwd():
             subprocess.run(
                 [f"{self.path_bin_poetry}", "install", "--with", "doc"], check=True
@@ -171,6 +204,7 @@ class PyProjectDeps:
 
     def poetry_install_doc(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -178,9 +212,13 @@ class PyProjectDeps:
             msg="Install doc dependencies",
             emoji=Emoji.install,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
-    def _poetry_install_all(self: "PyProjectOps"):
+    def _poetry_install_all(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -194,6 +232,8 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
+        if dry_run is True:
+            return
         args = [
             f"{self.path_venv_bin_pip}",
             "install",
@@ -209,6 +249,7 @@ class PyProjectDeps:
 
     def poetry_install_all(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -216,6 +257,7 @@ class PyProjectDeps:
             msg="Install all dependencies for dev, test, doc",
             emoji=Emoji.install,
             verbose=verbose,
+            dry_run=dry_run,
         )
 
     def _do_we_need_poetry_export(
@@ -352,10 +394,15 @@ class PyProjectDeps:
             )
         )
 
-    def _poetry_export(self: "PyProjectOps") -> bool:
+    def _poetry_export(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ) -> bool:
         """
         :return: ``True`` if ``poetry export`` is executed, ``False`` if not.
         """
+        if dry_run is True:
+            return False
         poetry_lock_hash = sha256_of_bytes(self.path_poetry_lock.read_bytes())
         if self._do_we_need_poetry_export(poetry_lock_hash):
             self._poetry_export_logic(poetry_lock_hash)
@@ -365,6 +412,7 @@ class PyProjectDeps:
 
     def poetry_export(
         self: "PyProjectOps",
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
 
@@ -378,14 +426,14 @@ class PyProjectDeps:
                 pipe=Emoji.install,
             )
             def func():
-                flag = self._poetry_export()
+                flag = self._poetry_export(dry_run=dry_run)
                 if flag is False:
                     logger.info("already did, do nothing")
                 return flag
 
             return func()
         else:
-            return self._poetry_export()
+            return self._poetry_export(dry_run=dry_run)
 
     def _try_poetry_export(self: "PyProjectOps"):
         """
@@ -405,7 +453,11 @@ class PyProjectDeps:
             _quite_pip_install(args)
         subprocess.run(args, check=True)
 
-    def _pip_install(self: "PyProjectOps", quiet: bool = False):
+    def _pip_install(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -417,6 +469,9 @@ class PyProjectDeps:
 
         - pip install: https://pip.pypa.io/en/stable/cli/pip_install/#options
         """
+        if dry_run is True:
+            return
+
         self._try_poetry_export()
 
         args = [
@@ -439,6 +494,7 @@ class PyProjectDeps:
     def pip_install(
         self: "PyProjectOps",
         quiet: bool = False,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -447,9 +503,14 @@ class PyProjectDeps:
             emoji=Emoji.install,
             verbose=verbose,
             quiet=quiet,
+            dry_run=dry_run,
         )
 
-    def _pip_install_dev(self: "PyProjectOps", quiet: bool = False):
+    def _pip_install_dev(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -457,6 +518,9 @@ class PyProjectDeps:
 
             pip install -r requirements-dev.txt
         """
+        if dry_run is True:
+            return
+
         self._try_poetry_export()
 
         args = [
@@ -470,6 +534,7 @@ class PyProjectDeps:
     def pip_install_dev(
         self: "PyProjectOps",
         quiet: bool = False,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -478,9 +543,14 @@ class PyProjectDeps:
             emoji=Emoji.install,
             verbose=verbose,
             quiet=quiet,
+            dry_run=dry_run,
         )
 
-    def _pip_install_test(self: "PyProjectOps", quiet: bool = False):
+    def _pip_install_test(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -488,6 +558,9 @@ class PyProjectDeps:
 
             pip install -r requirements-test.txt
         """
+        if dry_run is True:
+            return
+
         self._try_poetry_export()
 
         args = [
@@ -501,6 +574,7 @@ class PyProjectDeps:
     def pip_install_test(
         self: "PyProjectOps",
         quiet: bool = False,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -509,9 +583,14 @@ class PyProjectDeps:
             emoji=Emoji.install,
             verbose=verbose,
             quiet=quiet,
+            dry_run=dry_run,
         )
 
-    def _pip_install_doc(self: "PyProjectOps", quiet: bool = False):
+    def _pip_install_doc(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -519,6 +598,9 @@ class PyProjectDeps:
 
             pip install -r requirements-doc.txt
         """
+        if dry_run is True:
+            return
+
         self._try_poetry_export()
 
         args = [
@@ -532,6 +614,7 @@ class PyProjectDeps:
     def pip_install_doc(
         self: "PyProjectOps",
         quiet: bool = False,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -540,9 +623,14 @@ class PyProjectDeps:
             emoji=Emoji.install,
             verbose=verbose,
             quiet=quiet,
+            dry_run=dry_run,
         )
 
-    def _pip_install_automation(self: "PyProjectOps", quiet: bool = False):
+    def _pip_install_automation(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -550,6 +638,9 @@ class PyProjectDeps:
 
             pip install -r requirements-automation.txt
         """
+        if dry_run is True:
+            return
+
         args = [
             f"{self.path_venv_bin_pip}",
             "install",
@@ -561,6 +652,7 @@ class PyProjectDeps:
     def pip_install_automation(
         self: "PyProjectOps",
         quiet: bool = False,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -569,9 +661,14 @@ class PyProjectDeps:
             emoji=Emoji.install,
             verbose=verbose,
             quiet=quiet,
+            dry_run=dry_run,
         )
 
-    def _pip_install_all(self: "PyProjectOps", quiet: bool = False):
+    def _pip_install_all(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        dry_run: bool = False,
+    ):
         """
         Run:
 
@@ -583,6 +680,9 @@ class PyProjectDeps:
             pip install -r requirements-doc.txt
             pip install -r requirements-automation.txt
         """
+        if dry_run is True:
+            return
+
         self._try_poetry_export()
 
         subprocess.run(
@@ -609,6 +709,7 @@ class PyProjectDeps:
     def pip_install_all(
         self: "PyProjectOps",
         quiet: bool = False,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -617,12 +718,14 @@ class PyProjectDeps:
             emoji=Emoji.install,
             verbose=verbose,
             quiet=quiet,
+            dry_run=dry_run,
         )
 
     def _pip_install_awsglue(
         self: "PyProjectOps",
         glue_version: str = "4.0",
         quiet: bool = False,
+        dry_run: bool = False,
     ):
         """
         Pip install the awsglue Python library.
@@ -632,6 +735,9 @@ class PyProjectDeps:
         - aws-glue-libs: https://github.com/awslabs/aws-glue-libs
         - VCS Support - Git: https://pip.pypa.io/en/stable/topics/vcs-support/#git
         """
+        if dry_run is True:
+            return
+
         glue_version_to_git_tag_mapper = {
             "4.0": "v4.0",
             "3.0": "v3.0",
@@ -649,6 +755,7 @@ class PyProjectDeps:
     def pip_install_awsglue(
         self: "PyProjectOps",
         quiet: bool = False,
+        dry_run: bool = False,
         verbose: bool = False,
     ):  # pragma: no cover
         return self._with_logger(
@@ -657,4 +764,5 @@ class PyProjectDeps:
             emoji=Emoji.install,
             verbose=verbose,
             quiet=quiet,
+            dry_run=dry_run,
         )
