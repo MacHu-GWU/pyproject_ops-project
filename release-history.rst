@@ -15,9 +15,9 @@ Backlog (TODO)
 **Miscellaneous**
 
 
-0.5.3 (2023-12-06)
+0.6.1 (2023-12-06)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Minor Improvements**
+**Features and Improvements**
 
 - Add ``dry_run`` parameter to most of the ``pyproject_ops.api.PyProjectOps`` methods, allow user to run them without doing anything, just to see what would happen.
 
