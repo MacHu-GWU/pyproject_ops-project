@@ -33,6 +33,9 @@ class PyProjectPaths:
     package_name: str = dataclasses.field()
 
     def _validate_paths(self):
+        if isinstance(self.dir_project_root, Path) is False:
+            self.dir_project_root = Path(self.dir_project_root)
+
         if (self.dir_project_root.joinpath("pyproject.toml").exists() is False) and (
             self.dir_project_root.joinpath("setup.py").exists() is False
         ):

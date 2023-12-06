@@ -9,6 +9,8 @@ import shutil
 import subprocess
 import dataclasses
 
+from .logger import logger
+from .vendor.emoji import Emoji
 
 if T.TYPE_CHECKING:  # pragma: no cover
     from .ops import PyProjectOps
@@ -37,7 +39,7 @@ class PyProjectVenv:
         if int(self.python_version[2:]) < 7:
             raise ValueError("python_version has to be >= 3.7")
 
-    def create_virtualenv(self: "PyProjectOps") -> bool:
+    def _create_virtualenv(self: "PyProjectOps") -> bool:
         """
         Run:
 
@@ -61,7 +63,32 @@ class PyProjectVenv:
             )
             return True
 
-    def remove_virtualenv(self: "PyProjectOps") -> bool:
+    def create_virtualenv(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ) -> bool:
+        if verbose:
+
+            @logger.start_and_end(
+                msg="Create Virtual Environment",
+                start_emoji=Emoji.python,
+                error_emoji=f"{Emoji.failed} {Emoji.python}",
+                end_emoji=f"{Emoji.succeeded} {Emoji.python}",
+                pipe=Emoji.python,
+            )
+            def func():
+                flag = self._create_virtualenv()
+                if flag:
+                    logger.info("done")
+                else:
+                    logger.info(f"{self.dir_venv} already exists, do nothing.")
+                return flag
+
+            return func()
+        else:
+            return self._create_virtualenv()
+
+    def _remove_virtualenv(self: "PyProjectOps") -> bool:
         """
         Run:
 
@@ -76,3 +103,28 @@ class PyProjectVenv:
             return True
         else:
             return False
+
+    def remove_virtualenv(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        if verbose:
+
+            @logger.start_and_end(
+                msg="Remove Virtual Environment",
+                start_emoji=Emoji.python,
+                error_emoji=f"{Emoji.failed} {Emoji.python}",
+                end_emoji=f"{Emoji.succeeded} {Emoji.python}",
+                pipe=Emoji.python,
+            )
+            def func():
+                flag = self._remove_virtualenv()
+                if flag:
+                    logger.info(f"done! {self.dir_venv} is removed.")
+                else:
+                    logger.info(f"{self.dir_venv} doesn't exists, do nothing.")
+                return flag
+
+            return func()
+        else:
+            return self._remove_virtualenv()

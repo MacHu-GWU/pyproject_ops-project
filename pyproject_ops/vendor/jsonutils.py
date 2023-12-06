@@ -3,6 +3,7 @@
 import json
 from re import findall
 
+__version__ = "0.1.1"
 
 def strip_comment_line_with_symbol(line: str, comment_symbol: str):
     """
@@ -39,6 +40,19 @@ def strip_comments(text: str, comment_symbols=frozenset(("#", "//"))):
 
 
 def json_loads(text: str, ignore_comments: bool = True):
+    """
+    Load Json from string. But this function can ignore comments.
+
+    Valid commands are::
+
+        # this is a comment
+        {
+            "a": 1 // this is a comment
+        }
+
+    :param text: the json string.
+    :param ignore_comments: whether or not to ignore comments.
+    """
     if ignore_comments:
         text = strip_comments(text)
     return json.loads(text)

@@ -13,7 +13,8 @@ import dataclasses
 from pathlib_mate import Path
 
 from .helpers import sha256_of_bytes
-
+from .logger import logger
+from .vendor.emoji import Emoji
 
 if T.TYPE_CHECKING:
     from .ops import PyProjectOps
@@ -36,7 +37,7 @@ class PyProjectDeps:
     Namespace class for dependencies management related automation.
     """
 
-    def poetry_lock(self: "PyProjectOps"):
+    def _poetry_lock(self: "PyProjectOps"):
         """
         Run:
 
@@ -57,7 +58,18 @@ class PyProjectDeps:
             args = [f"{self.path_bin_poetry}", "lock"]
             subprocess.run(args, check=True)
 
-    def poetry_install(self: "PyProjectOps"):
+    def poetry_lock(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._poetry_lock(),
+            msg="Resolve Dependencies Tree",
+            emoji=Emoji.install,
+            verbose=verbose,
+        )
+
+    def _poetry_install(self: "PyProjectOps"):
         """
         Run:
 
@@ -73,7 +85,18 @@ class PyProjectDeps:
             args = [f"{self.path_bin_poetry}", "install"]
             subprocess.run(args, check=True)
 
-    def poetry_install_dev(self: "PyProjectOps"):
+    def poetry_install(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._poetry_install,
+            msg="Install main dependencies and Package itself",
+            emoji=Emoji.install,
+            verbose=verbose,
+        )
+
+    def _poetry_install_dev(self: "PyProjectOps"):
         """
         Run:
 
@@ -90,7 +113,18 @@ class PyProjectDeps:
                 [f"{self.path_bin_poetry}", "install", "--with", "dev"], check=True
             )
 
-    def poetry_install_test(self: "PyProjectOps"):
+    def poetry_install_dev(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._poetry_install_dev,
+            msg="Install dev dependencies",
+            emoji=Emoji.install,
+            verbose=verbose,
+        )
+
+    def _poetry_install_test(self: "PyProjectOps"):
         """
         Run:
 
@@ -107,7 +141,18 @@ class PyProjectDeps:
                 [f"{self.path_bin_poetry}", "install", "--with", "test"], check=True
             )
 
-    def poetry_install_doc(self: "PyProjectOps"):
+    def poetry_install_test(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._poetry_install_test,
+            msg="Install test dependencies",
+            emoji=Emoji.install,
+            verbose=verbose,
+        )
+
+    def _poetry_install_doc(self: "PyProjectOps"):
         """
         Run:
 
@@ -124,7 +169,18 @@ class PyProjectDeps:
                 [f"{self.path_bin_poetry}", "install", "--with", "doc"], check=True
             )
 
-    def poetry_install_all(self: "PyProjectOps"):
+    def poetry_install_doc(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._poetry_install_doc,
+            msg="Install doc dependencies",
+            emoji=Emoji.install,
+            verbose=verbose,
+        )
+
+    def _poetry_install_all(self: "PyProjectOps"):
         """
         Run:
 
@@ -149,6 +205,17 @@ class PyProjectDeps:
         subprocess.run([f"{self.path_bin_poetry}", "install"], check=True)
         subprocess.run(
             [f"{self.path_bin_poetry}", "install", "--with", "dev,test,doc"], check=True
+        )
+
+    def poetry_install_all(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._poetry_install_dev,
+            msg="Install all dependencies for dev, test, doc",
+            emoji=Emoji.install,
+            verbose=verbose,
         )
 
     def _do_we_need_poetry_export(
@@ -245,7 +312,7 @@ class PyProjectDeps:
             args.append(group)
             subprocess.run(args, check=True)
 
-    def _poetry_export(
+    def _poetry_export_logic(
         self: "PyProjectOps",
         current_poetry_lock_hash: str,
         with_hash: bool = True,
@@ -285,16 +352,40 @@ class PyProjectDeps:
             )
         )
 
-    def poetry_export(self: "PyProjectOps") -> bool:
+    def _poetry_export(self: "PyProjectOps") -> bool:
         """
         :return: ``True`` if ``poetry export`` is executed, ``False`` if not.
         """
         poetry_lock_hash = sha256_of_bytes(self.path_poetry_lock.read_bytes())
         if self._do_we_need_poetry_export(poetry_lock_hash):
-            self._poetry_export(poetry_lock_hash)
+            self._poetry_export_logic(poetry_lock_hash)
             return True
         else:
             return False
+
+    def poetry_export(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+
+        if verbose:
+
+            @logger.start_and_end(
+                msg="Install all dependencies for dev, test, doc",
+                start_emoji=Emoji.install,
+                error_emoji=f"{Emoji.failed} {Emoji.install}",
+                end_emoji=f"{Emoji.succeeded} {Emoji.install}",
+                pipe=Emoji.install,
+            )
+            def func():
+                flag = self._poetry_install_all()
+                if flag is False:
+                    logger.info("already did, do nothing")
+                return flag
+
+            return func()
+        else:
+            return self._poetry_install_all()
 
     def _try_poetry_export(self: "PyProjectOps"):
         """
@@ -314,7 +405,7 @@ class PyProjectDeps:
             _quite_pip_install(args)
         subprocess.run(args, check=True)
 
-    def pip_install(self: "PyProjectOps", quiet: bool = False):
+    def _pip_install(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -345,7 +436,20 @@ class PyProjectDeps:
         ]
         self._run_pip_install(args, quiet)
 
-    def pip_install_dev(self: "PyProjectOps", quiet: bool = False):
+    def pip_install(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._pip_install,
+            msg="Install main dependencies and Package itself",
+            emoji=Emoji.install,
+            verbose=verbose,
+            quiet=quiet,
+        )
+
+    def _pip_install_dev(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -363,7 +467,20 @@ class PyProjectDeps:
         ]
         self._run_pip_install(args, quiet)
 
-    def pip_install_test(self: "PyProjectOps", quiet: bool = False):
+    def pip_install_dev(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._pip_install_dev,
+            msg="Install dev dependencies",
+            emoji=Emoji.install,
+            verbose=verbose,
+            quiet=quiet,
+        )
+
+    def _pip_install_test(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -381,7 +498,20 @@ class PyProjectDeps:
         ]
         self._run_pip_install(args, quiet)
 
-    def pip_install_doc(self: "PyProjectOps", quiet: bool = False):
+    def pip_install_test(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._pip_install_test,
+            msg="Install test dependencies",
+            emoji=Emoji.install,
+            verbose=verbose,
+            quiet=quiet,
+        )
+
+    def _pip_install_doc(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -399,7 +529,20 @@ class PyProjectDeps:
         ]
         self._run_pip_install(args, quiet)
 
-    def pip_install_automation(self: "PyProjectOps", quiet: bool = False):
+    def pip_install_doc(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._pip_install_doc,
+            msg="Install doc dependencies",
+            emoji=Emoji.install,
+            verbose=verbose,
+            quiet=quiet,
+        )
+
+    def _pip_install_automation(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -415,7 +558,20 @@ class PyProjectDeps:
         ]
         self._run_pip_install(args, quiet)
 
-    def pip_install_all(self: "PyProjectOps", quiet: bool = False):
+    def pip_install_automation(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._pip_install_automation,
+            msg="Install automation dependencies",
+            emoji=Emoji.install,
+            verbose=verbose,
+            quiet=quiet,
+        )
+
+    def _pip_install_all(self: "PyProjectOps", quiet: bool = False):
         """
         Run:
 
@@ -450,7 +606,20 @@ class PyProjectDeps:
             args = [f"{self.path_venv_bin_pip}", "install", "-r", f"{path}"]
             self._run_pip_install(args, quiet)
 
-    def pip_install_awsglue(
+    def pip_install_all(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._pip_install_all,
+            msg="Install all dependencies",
+            emoji=Emoji.install,
+            verbose=verbose,
+            quiet=quiet,
+        )
+
+    def _pip_install_awsglue(
         self: "PyProjectOps",
         glue_version: str = "4.0",
         quiet: bool = False,
@@ -476,3 +645,16 @@ class PyProjectDeps:
             f"git+https://github.com/awslabs/aws-glue-libs.git@{git_tag}",
         ]
         self._run_pip_install(args, quiet)
+
+    def pip_install_awsglue(
+        self: "PyProjectOps",
+        quiet: bool = False,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._pip_install_awsglue,
+            msg="Install awsglue library",
+            emoji=Emoji.install,
+            verbose=verbose,
+            quiet=quiet,
+        )

@@ -7,6 +7,7 @@ The namespace for all the pyproject_ops automation methods.
 import dataclasses
 
 from .pyproject_paths import PyProjectPaths
+from .pyproject_logger import PyProjectLogger
 from .pyproject_venv import PyProjectVenv
 from .pyproject_toml import PyProjectToml
 from .pyproject_deps import PyProjectDeps
@@ -23,6 +24,7 @@ from .pyproject_aws_glue import PyProjectAWSGlue
 @dataclasses.dataclass
 class PyProjectOps(
     PyProjectPaths,
+    PyProjectLogger,
     PyProjectVenv,
     PyProjectToml,
     PyProjectDeps,
