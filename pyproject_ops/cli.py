@@ -6,6 +6,7 @@ import dataclasses
 import fire
 from pathlib_mate import Path
 
+from ._version import __version__
 from .vendor.jsonutils import json_loads
 from .ops import PyProjectOps
 
@@ -60,6 +61,10 @@ class Command:
     """
     pyops command line interface.
     """
+    def __call__(self, version: bool = False):
+        if version:
+            print(__version__)
+
 
     def venv_create(self):
         """
