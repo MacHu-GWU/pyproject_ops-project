@@ -3,7 +3,7 @@ pyproject_ops_venv/
 pyproject_ops.egg-info/
 pyproject_ops-*/
 tmp/
-
+pyproject.toml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

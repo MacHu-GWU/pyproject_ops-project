@@ -1,5 +1,5 @@
-# this is just for integration test purpose, it is not used for publishing to PyPI
-# we use setup.py
+# this is just for integration test purpose, it is not used for publishing to PyPI, we use setup.py
+# for some manual test, you need to make a copy of this and rename it to ``pyproject.toml``
 [tool.poetry]
 name = "pyproject_ops"
 version = "0.6.1"
