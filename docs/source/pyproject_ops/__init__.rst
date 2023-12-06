@@ -19,13 +19,16 @@ sub packages and modules
     ops <ops>
     paths <paths>
     pyproject_aws <pyproject_aws>
+    pyproject_aws_glue <pyproject_aws_glue>
     pyproject_aws_lambda <pyproject_aws_lambda>
     pyproject_build <pyproject_build>
     pyproject_config_management <pyproject_config_management>
     pyproject_deps <pyproject_deps>
     pyproject_docs <pyproject_docs>
+    pyproject_logger <pyproject_logger>
     pyproject_paths <pyproject_paths>
     pyproject_publish <pyproject_publish>
     pyproject_tests <pyproject_tests>
+    pyproject_toml <pyproject_toml>
     pyproject_venv <pyproject_venv>
     

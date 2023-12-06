@@ -8,6 +8,7 @@ import typing as T
 import shutil
 import dataclasses
 
+from .vendor.emoji import Emoji
 from .vendor.build_dist import (
     build_dist_with_python_build,
     build_dist_with_poetry_build,
@@ -23,7 +24,7 @@ class PyProjectBuild:
     Namespace class for build related automation.
     """
 
-    def python_build(self: "PyProjectOps"):
+    def _python_build(self: "PyProjectOps"):
         """
         Build python source distribution using
         `pypa-build <https://pypa-build.readthedocs.io/en/latest/>`_.
@@ -36,7 +37,18 @@ class PyProjectBuild:
             verbose=True,
         )
 
-    def poetry_build(self: "PyProjectOps"):
+    def python_build(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._python_build,
+            msg="Build python distribution using pypa-build",
+            emoji=Emoji.build,
+            verbose=verbose,
+        )
+
+    def _poetry_build(self: "PyProjectOps"):
         """
         Build python source distribution using
 
@@ -48,4 +60,15 @@ class PyProjectBuild:
             dir_project_root=self.dir_project_root,
             path_bin_poetry=self.path_bin_poetry,
             verbose=True,
+        )
+
+    def poetry_build(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._poetry_build,
+            msg="Build python distribution using poetry",
+            emoji=Emoji.build,
+            verbose=verbose,
         )

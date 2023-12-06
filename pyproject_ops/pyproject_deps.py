@@ -63,7 +63,7 @@ class PyProjectDeps:
         verbose: bool = False,
     ):
         return self._with_logger(
-            method=self._poetry_lock(),
+            method=self._poetry_lock,
             msg="Resolve Dependencies Tree",
             emoji=Emoji.install,
             verbose=verbose,
@@ -212,7 +212,7 @@ class PyProjectDeps:
         verbose: bool = False,
     ):
         return self._with_logger(
-            method=self._poetry_install_dev,
+            method=self._poetry_install_all,
             msg="Install all dependencies for dev, test, doc",
             emoji=Emoji.install,
             verbose=verbose,

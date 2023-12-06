@@ -11,6 +11,7 @@ import dataclasses
 import subprocess
 
 from .operation_system import OPEN_COMMAND
+from .vendor.emoji import Emoji
 
 if T.TYPE_CHECKING:  # pragma: no cover
     from .ops import PyProjectOps
@@ -21,7 +22,7 @@ class PyProjectDocs:
     """
     Namespace class for document related automation.
     """
-    def build_doc(self: "PyProjectOps"):
+    def _build_doc(self: "PyProjectOps"):
         """
         Use sphinx doc to build documentation site locally. It set the
         necessary environment variables so that the ``make html`` command
@@ -44,7 +45,18 @@ class PyProjectDocs:
         ]
         subprocess.run(args)
 
-    def view_doc(self: "PyProjectOps"):
+    def build_doc(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._build_doc,
+            msg="Build Documentation Site Locally",
+            emoji=Emoji.doc,
+            verbose=verbose,
+        )
+
+    def _view_doc(self: "PyProjectOps"):
         """
         View documentation site built locally in web browser.
 
@@ -52,7 +64,18 @@ class PyProjectDocs:
         """
         subprocess.run([OPEN_COMMAND, f"{self.path_sphinx_doc_build_index_html}"])
 
-    def deploy_versioned_doc(
+    def view_doc(
+        self: "PyProjectOps",
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._view_doc,
+            msg="View Documentation Site Locally",
+            emoji=Emoji.doc,
+            verbose=verbose,
+        )
+
+    def _deploy_versioned_doc(
         self: "PyProjectOps",
         bucket: str,
         aws_profile: T.Optional[str] = None,
@@ -74,7 +97,22 @@ class PyProjectDocs:
             args.extend(["--profile", aws_profile])
         subprocess.run(args, check=True)
 
-    def deploy_latest_doc(
+    def deploy_versioned_doc(
+        self: "PyProjectOps",
+        bucket: str,
+        aws_profile: T.Optional[str] = None,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._deploy_versioned_doc,
+            msg="Deploy Documentation Site To S3 as Versioned Doc",
+            emoji=Emoji.doc,
+            bucket=bucket,
+            aws_profile=aws_profile,
+            verbose=verbose,
+        )
+
+    def _deploy_latest_doc(
         self: "PyProjectOps",
         bucket: str,
         aws_profile: T.Optional[str] = None,
@@ -95,6 +133,21 @@ class PyProjectDocs:
         if aws_profile:
             args.extend(["--profile", aws_profile])
         subprocess.run(args, check=True)
+
+    def deploy_latest_doc(
+        self: "PyProjectOps",
+        bucket: str,
+        aws_profile: T.Optional[str] = None,
+        verbose: bool = False,
+    ):
+        return self._with_logger(
+            method=self._deploy_latest_doc,
+            msg="Deploy Documentation Site To S3 as Latest Doc",
+            emoji=Emoji.doc,
+            bucket=bucket,
+            aws_profile=aws_profile,
+            verbose=verbose,
+        )
 
     def view_latest_doc(self: "PyProjectOps", bucket: str):
         """
