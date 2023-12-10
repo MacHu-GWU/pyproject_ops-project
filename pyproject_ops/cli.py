@@ -59,11 +59,14 @@ pyops = PyProjectOps(
 
 class Command:
     """
-    pyops command line interface.
+    python project ops command line interface.
     """
     def __call__(self, version: bool = False):
         if version:
             print(__version__)
+        else:
+            print("python project ops command line interface.")
+            print("type: 'pyops -h' for help")
 
 
     def venv_create(self):
