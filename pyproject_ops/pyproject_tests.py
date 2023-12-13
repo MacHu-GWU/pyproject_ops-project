@@ -89,12 +89,17 @@ class PyProjectTests:
             dry_run=dry_run,
         )
 
-    def _view_cov(self: "PyProjectOps"):
+    def _view_cov(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         View coverage test output html file locally in web browser.
 
         It is usually at the ``${dir_project_root}/htmlcov/index.html``
         """
+        if dry_run is True:
+            return
         subprocess.run([OPEN_COMMAND, f"{self.path_htmlcov_index_html}"])
 
     def view_cov(

@@ -18,6 +18,7 @@ class PyProjectAWS:
     """
     Namespace class for AWS related automation.
     """
+
     @property
     def path_bin_aws(self: "PyProjectOps") -> Path:
         """

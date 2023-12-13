@@ -41,7 +41,7 @@ class PyProjectToml:
     """
 
     @classmethod
-    def from_pyproject_toml(cls, path_pyproject_toml: Path) -> "PyProjectOps":
+    def from_pyproject_toml(cls, path_pyproject_toml: Path):
         """
         Create the PyProjectOps instance from ``pyproject.toml`` file by reading
         the package name and python version information from it.
