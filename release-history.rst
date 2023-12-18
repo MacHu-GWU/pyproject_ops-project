@@ -15,6 +15,13 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.7.1 (2023-12-18)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add ``pyproject_ops.api.bump_version`` to bump version in ``_version.py`` and ``pyproject.toml``.
+
+
 0.6.3 (2023-12-13)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Bugfixes**
