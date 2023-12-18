@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyproject_ops"
-version = "0.6.3"
+version = "0.7.1"
 
 [tool.poetry.dependencies]
 python = "3.8.*"
