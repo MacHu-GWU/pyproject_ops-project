@@ -61,13 +61,13 @@ class Command:
     """
     python project ops command line interface.
     """
+
     def __call__(self, version: bool = False):
         if version:
             print(__version__)
         else:
             print("python project ops command line interface.")
             print("type: 'pyops -h' for help")
-
 
     def venv_create(self):
         """
@@ -229,6 +229,31 @@ class Command:
         pyops.pip_install_dev()
         pyops.python_build()
         pyops.twine_upload()
+
+    def bump_version(
+        self,
+        how: str,
+        minor_start_from: int = 0,
+        micro_start_from: int = 0,
+    ):
+        """
+        🔼 Bump semantic version.
+
+
+        """
+        kwargs = dict(
+            minor_start_from=minor_start_from,
+            micro_start_from=micro_start_from,
+        )
+        if how == "patch":
+            kwargs["patch"] = True
+        elif how == "minor":
+            kwargs["minor"] = True
+        elif how == "major":
+            kwargs["major"] = True
+        else:
+            raise ValueError(f"invalid value for how: {how}")
+        pyops.bump_version(**kwargs)
 
 
 def main():

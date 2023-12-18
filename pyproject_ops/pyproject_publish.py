@@ -88,7 +88,7 @@ class PyProjectPublish:
         self.path_version_py.write_text(version_py_content)
 
         # update pyproject.toml file
-        if self.path_bin_poetry:
+        if self.path_pyproject_toml.exists():
             if major:
                 action = "major"
             elif minor:
@@ -99,7 +99,7 @@ class PyProjectPublish:
                 raise NotImplementedError
             with self.dir_project_root.temp_cwd():
                 args = [
-                    self.path_bin_poetry,
+                    f"{self.path_bin_poetry}",
                     "version",
                     action,
                 ]

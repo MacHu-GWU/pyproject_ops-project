@@ -80,7 +80,7 @@ def bump_version(
     """
     if sum([patch, minor, major]) != 1:
         raise ValueError(
-            "Only one and exact one of 'is_patch', 'is_minor', 'is_major' can be True"
+            "Only one and exact one of 'patch', 'minor', 'major' can be True"
         )
 
     # get the current version
