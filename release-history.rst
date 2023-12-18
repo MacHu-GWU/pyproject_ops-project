@@ -20,6 +20,7 @@ Backlog (TODO)
 **Features and Improvements**
 
 - add ``pyproject_ops.api.bump_version`` to bump version in ``_version.py`` and ``pyproject.toml``.
+- add ``pyops bump-version --how patch`` to bump patch, minor, major version in ``_version.py`` and ``pyproject.toml``.
 
 
 0.6.3 (2023-12-13)
