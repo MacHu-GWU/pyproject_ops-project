@@ -37,15 +37,22 @@ jobs:
           set -xe
           python -VV
           python -m site
-          python -m pip install --upgrade pip setuptools wheel virtualenv
+          python -m pip install --upgrade pip setuptools wheel virtualenv codecov
+          python -m pip install -e .
+          python -m pip install -r requirements-test.txt
+      - if: matrix.os == 'windows-latest'
+        name: "Install dependencies on Windows"
+        run: |
+          python -m site
+          python -m pip install --upgrade pip setuptools wheel virtualenv codecov
           python -m pip install -e .
           python -m pip install -r requirements-test.txt
       - name: "Run test"
         run: "python -m pytest tests_int --cov=pyproject_ops"
       # don't forget to goto codecov.io, enable your repo, copy the token
       # create an CODECOV_TOKEN env var in GitHub actions secret
-      - name: "Upload coverage to Codecov"
-        if: "contains(env.USING_COVERAGE, matrix.python-version)"
-        uses: "codecov/codecov-action@v3" # https://github.com/marketplace/actions/codecov-action
-        with:
-          fail_ci_if_error: true
+#      - name: "Upload coverage to Codecov"
+#        if: "contains(env.USING_COVERAGE, matrix.python-version)"
+#        uses: "codecov/codecov-action@v3" # https://github.com/marketplace/actions/codecov-action
+#        with:
+#          fail_ci_if_error: true
