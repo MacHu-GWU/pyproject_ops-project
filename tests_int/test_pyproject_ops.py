@@ -12,7 +12,7 @@ from pyproject_ops.paths import dir_project_root
 def setup_module(module):
     src = dir_project_root.joinpath("pyproject_for_test.toml")
     dst = dir_project_root.joinpath("pyproject.toml")
-    src.copy_to(dst)
+    src.copyto(dst)
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
