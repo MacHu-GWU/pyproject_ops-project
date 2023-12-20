@@ -18,10 +18,10 @@ jobs:
       USING_COVERAGE: "3.7,3.8,3.9,3.10,3.11"
     strategy:
       matrix:
-        os: ["ubuntu-latest"]
+#        os: ["ubuntu-latest"]
         python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
         # note: we don't test on windows
-#        os: ["ubuntu-latest", "windows-latest"]
+        os: ["ubuntu-latest", "windows-latest"]
 #        python-version: ["3.8", ] # for debug only
         exclude:
           - os: windows-latest # this is a useless exclude rules for demonstration use only
@@ -41,16 +41,15 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel virtualenv codecov poetry
           python -m pip install -e .
           python -m pip install -r requirements-test.txt
-#      - if: matrix.os == 'windows-latest'
-#        name: "Install dependencies on Windows"
-#        run: |
-#          python -m site
-#          python -m pip install --upgrade pip setuptools wheel virtualenv codecov poetry
-#          python -m pip install -e .
-#          python -m pip install -r requirements-test.txt
+      - if: matrix.os == 'windows-latest'
+        name: "Install dependencies on Windows"
+        run: |
+          python -m site
+          python -m pip install --upgrade pip setuptools wheel virtualenv codecov poetry
+          python -m pip install -e .
+          python -m pip install -r requirements-test.txt
       - name: "Run test"
         run: |
-          cp pyproject_for_test.toml pyproject.toml
           python -m pytest tests_int --cov=pyproject_ops
       # don't forget to goto codecov.io, enable your repo, copy the token
       # create an CODECOV_TOKEN env var in GitHub actions secret
