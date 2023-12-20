@@ -183,10 +183,11 @@ class PyProjectDocs:
             dry_run=dry_run,
         )
 
-    def view_latest_doc(
+    def _view_latest_doc(
         self: "PyProjectOps",
         bucket: str,
         prefix: str = "projects/",
+        dry_run: bool = False,
     ):
         """
         Open the latest document that hosted on AWS S3 in web browser.
@@ -194,9 +195,34 @@ class PyProjectDocs:
         Here's a sample document site url
         https://my-bucket.s3.amazonaws.com/my-prefix/my_package/latest/index.html
         """
+        if dry_run is True:
+            return
         url = (
             f"https://{bucket}.s3.amazonaws.com/{prefix}{self.package_name}"
             f"/latest/{self.path_sphinx_doc_build_index_html.basename}"
         )
         args = [OPEN_COMMAND, url]
         subprocess.run(args, check=True)
+
+    def view_latest_doc(
+        self: "PyProjectOps",
+        bucket: str,
+        prefix: str = "projects/",
+        dry_run: bool = False,
+        verbose: bool = False,
+    ):
+        """
+        Open the latest document that hosted on AWS S3 in web browser.
+
+        Here's a sample document site url
+        https://my-bucket.s3.amazonaws.com/my-prefix/my_package/latest/index.html
+        """
+        return self._with_logger(
+            method=self._view_latest_doc,
+            msg="View Latest Doc on AWS S3",
+            emoji=Emoji.doc,
+            bucket=bucket,
+            prefix=prefix,
+            verbose=verbose,
+            dry_run=dry_run,
+        )
