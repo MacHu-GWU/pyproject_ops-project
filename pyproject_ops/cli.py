@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import typing as T
+import sys
+import subprocess
 import dataclasses
 
 import fire
@@ -28,6 +30,7 @@ class PyProjectOpsConfig:
     dev_py_ver_micro: int = dataclasses.field()
     doc_host_aws_profile: T.Optional[str] = dataclasses.field(default=None)
     doc_host_s3_bucket: T.Optional[str] = dataclasses.field(default=None)
+    doc_host_s3_prefix: T.Optional[str] = dataclasses.field(default="projects/")
 
 
 def find_pyproject_ops_json(dir_cwd: Path) -> Path:
@@ -62,12 +65,15 @@ class Command:
     python project ops command line interface.
     """
 
-    def __call__(self, version: bool = False):
+    def __call__(
+        self,
+        version: bool = False,
+    ):
         if version:
             print(__version__)
         else:
-            print("python project ops command line interface.")
-            print("type: 'pyops -h' for help")
+            path_pyops = Path(sys.executable).parent.joinpath("pyops")
+            subprocess.run([f"{path_pyops}", "--help"], check=True)
 
     def venv_create(self):
         """
@@ -203,6 +209,7 @@ class Command:
         """
         pyops.deploy_versioned_doc(
             bucket=pyops_config.doc_host_s3_bucket,
+            prefix=pyops_config.doc_host_s3_prefix,
             aws_profile=pyops_config.doc_host_aws_profile,
         )
 
@@ -212,6 +219,7 @@ class Command:
         """
         pyops.deploy_latest_doc(
             bucket=pyops_config.doc_host_s3_bucket,
+            prefix=pyops_config.doc_host_s3_prefix,
             aws_profile=pyops_config.doc_host_aws_profile,
         )
 
@@ -219,7 +227,10 @@ class Command:
         """
         👀 📔 View the latest documentation website on S3
         """
-        pyops.view_latest_doc(bucket=pyops_config.doc_host_s3_bucket)
+        pyops.view_latest_doc(
+            bucket=pyops_config.doc_host_s3_bucket,
+            prefix=pyops_config.doc_host_s3_prefix,
+        )
 
     def publish(self):
         """
@@ -239,7 +250,7 @@ class Command:
         """
         🔼 Bump semantic version.
 
-
+        :param how: patch, minor, major
         """
         kwargs = dict(
             minor_start_from=minor_start_from,
