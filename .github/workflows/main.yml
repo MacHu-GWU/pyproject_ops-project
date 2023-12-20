@@ -50,7 +50,7 @@ jobs:
 #          python -m pip install -r requirements-test.txt
       - name: "Run test"
         run: |
-          copy pyproject_for_test.toml pyproject.toml
+          cp pyproject_for_test.toml pyproject.toml
           python -m pytest tests_int --cov=pyproject_ops
       # don't forget to goto codecov.io, enable your repo, copy the token
       # create an CODECOV_TOKEN env var in GitHub actions secret
