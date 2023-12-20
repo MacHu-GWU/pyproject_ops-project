@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import os
 import pytest
+import os
 import sys
 from pathlib_mate import Path
 from pyproject_ops.api import PyProjectOps
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
 def test():
     pyops = PyProjectOps(
         dir_project_root=Path.dir_here(__file__).parent,
