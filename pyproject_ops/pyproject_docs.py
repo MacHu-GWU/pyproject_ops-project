@@ -102,7 +102,7 @@ class PyProjectDocs:
         Deploy versioned document to AWS S3.
 
         The S3 bucket has to enable static website hosting. The document site
-        will be uploaded to s3://${bucket}/projects/${package_name}/${package_version}/
+        will be uploaded to ``s3://${bucket}/${prefix}${package_name}/${package_version}/``
         """
         if dry_run is True:
             return
@@ -145,10 +145,10 @@ class PyProjectDocs:
         dry_run: bool = False,
     ):
         """
-        Deploy latest document to AWS S3.
+        Deploy the latest document to AWS S3.
 
         The S3 bucket has to enable static website hosting. The document site
-        will be uploaded to s3://${bucket}/projects/${package_name}/latest/
+        will be uploaded to ``s3://${bucket}/${prefix}${package_name}/latest/``
         """
         if dry_run is True:
             return
@@ -190,6 +190,9 @@ class PyProjectDocs:
     ):
         """
         Open the latest document that hosted on AWS S3 in web browser.
+
+        Here's a sample document site url
+        https://my-bucket.s3.amazonaws.com/my-prefix/my_package/latest/index.html
         """
         url = (
             f"https://{bucket}.s3.amazonaws.com/{prefix}{self.package_name}"
