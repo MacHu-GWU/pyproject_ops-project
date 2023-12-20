@@ -685,16 +685,14 @@ class PyProjectDeps:
 
         self._try_poetry_export()
 
-        subprocess.run(
-            [
-                f"{self.path_venv_bin_pip}",
-                "install",
-                "-e",
-                f"{self.dir_project_root}",
-                "--no-deps",
-            ],
-            check=True,
-        )
+        args = [
+            f"{self.path_venv_bin_pip}",
+            "install",
+            "-e",
+            f"{self.dir_project_root}",
+            "--no-deps",
+        ]
+        subprocess.run(args, check=True)
 
         for path in [
             self.path_requirements,
