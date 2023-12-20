@@ -251,6 +251,8 @@ class Command:
         🔼 Bump semantic version.
 
         :param how: patch, minor, major
+        :param minor_start_from: start from this minor version if you bump major
+        :param micro_start_from: start from this micro version if you bump minor
         """
         kwargs = dict(
             minor_start_from=minor_start_from,
