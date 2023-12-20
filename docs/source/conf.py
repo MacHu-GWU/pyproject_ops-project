@@ -47,7 +47,10 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_jinja',
     'sphinx_copybutton',
+    'sphinx_design',
+    'sphinx_search.extension',
     'docfly.directives',
+    'nbsphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
