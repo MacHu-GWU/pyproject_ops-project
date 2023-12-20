@@ -94,6 +94,7 @@ class PyProjectDocs:
     def _deploy_versioned_doc(
         self: "PyProjectOps",
         bucket: str,
+        prefix: str = "projects/",
         aws_profile: T.Optional[str] = None,
         dry_run: bool = False,
     ):
@@ -111,7 +112,7 @@ class PyProjectDocs:
             "s3",
             "sync",
             f"{self.dir_sphinx_doc_build_html}",
-            f"s3://{bucket}/projects/{self.package_name}/{self.package_version}/",
+            f"s3://{bucket}/{prefix}{self.package_name}/{self.package_version}/",
         ]
         if aws_profile:
             args.extend(["--profile", aws_profile])
@@ -120,6 +121,7 @@ class PyProjectDocs:
     def deploy_versioned_doc(
         self: "PyProjectOps",
         bucket: str,
+        prefix: str = "projects/",
         aws_profile: T.Optional[str] = None,
         dry_run: bool = False,
         verbose: bool = False,
@@ -129,6 +131,7 @@ class PyProjectDocs:
             msg="Deploy Documentation Site To S3 as Versioned Doc",
             emoji=Emoji.doc,
             bucket=bucket,
+            prefix=prefix,
             aws_profile=aws_profile,
             dry_run=dry_run,
             verbose=verbose,
@@ -137,6 +140,7 @@ class PyProjectDocs:
     def _deploy_latest_doc(
         self: "PyProjectOps",
         bucket: str,
+        prefix: str = "projects/",
         aws_profile: T.Optional[str] = None,
         dry_run: bool = False,
     ):
@@ -154,7 +158,7 @@ class PyProjectDocs:
             "s3",
             "sync",
             f"{self.dir_sphinx_doc_build_html}",
-            f"s3://{bucket}/projects/{self.package_name}/latest/",
+            f"s3://{bucket}/{prefix}{self.package_name}/latest/",
         ]
         if aws_profile:
             args.extend(["--profile", aws_profile])
@@ -163,6 +167,7 @@ class PyProjectDocs:
     def deploy_latest_doc(
         self: "PyProjectOps",
         bucket: str,
+        prefix: str = "projects/",
         aws_profile: T.Optional[str] = None,
         dry_run: bool = False,
         verbose: bool = False,
@@ -172,17 +177,22 @@ class PyProjectDocs:
             msg="Deploy Documentation Site To S3 as Latest Doc",
             emoji=Emoji.doc,
             bucket=bucket,
+            prefix=prefix,
             aws_profile=aws_profile,
             verbose=verbose,
             dry_run=dry_run,
         )
 
-    def view_latest_doc(self: "PyProjectOps", bucket: str):
+    def view_latest_doc(
+        self: "PyProjectOps",
+        bucket: str,
+        prefix: str = "projects/",
+    ):
         """
         Open the latest document that hosted on AWS S3 in web browser.
         """
         url = (
-            f"https://{bucket}.s3.amazonaws.com/projects/{self.package_name}"
+            f"https://{bucket}.s3.amazonaws.com/{prefix}{self.package_name}"
             f"/latest/{self.path_sphinx_doc_build_index_html.basename}"
         )
         args = [OPEN_COMMAND, url]
