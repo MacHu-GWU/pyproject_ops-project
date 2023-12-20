@@ -2,7 +2,7 @@
 # for some manual test, you need to make a copy of this and rename it to ``pyproject.toml``
 [tool.poetry]
 name = "pyproject_ops"
-version = "0.6.3"
+version = "0.7.2"
 description = "Python project Ops automation."
 authors = ["Sanhe Hu <husanhe@gmail.com>"]
 

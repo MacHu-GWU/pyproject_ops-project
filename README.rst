@@ -59,24 +59,141 @@ Welcome to ``pyproject_ops`` Documentation
 
 What is this project?
 ------------------------------------------------------------------------------
-There are many different folder structures for Python project. I have my personal best practice based on Python career experience. This project is an automation tools that can do a lot of common tasks for Python project development life cycle, such as: "create virtualenv", "install dependencies", "run test", "build documentation site", etc ...
+There are various folder structures for Python projects, each with its own merits. Drawing from my extensive Python career experience, I have developed a personal best practice. To streamline the creation of the codebase skeleton according to this practice, I have introduced a tool called `cookiecutter-pyproject <https://github.com/MacHu-GWU/cookiecutter-pyproject>`_.
+
+By adopting this folder structure setup, ``pyproject_ops`` is an automation tool, capable of handling common tasks throughout the Python project development lifecycle. These tasks include "creating virtual environments", "installing dependencies", "running tests", "building documentation sites", and more.
+
+This tool is, in essence, my secret weapon for efficiently managing over 120 Python open source projects, all available on PyPI at https://pypi.org/user/machugwu/. Each of these projects is equipped with essential features such as continuous integration (CI), code coverage testing, matrix testing, and documentation websites.
 
 A little history about this project:
 
-    I had an automation tool `pygitrepo <https://github.com/MacHu-GWU/pygitrepo-project>`_ for my old development workflow. The pygitrepo is primarily based on setup.py and requirements.txt file. ``pyproject_ops`` still support the old convention, and also support ``pyproject.toml`` + ``poetry``. It helps me to write less code to do Python development workflow automations.
+    I previously had an automation tool called `pygitrepo <https://github.com/MacHu-GWU/pygitrepo-project>`_ that was tailored to my former development workflow. ``pygitrepo`` primarily relied on ``setup.py`` and ``requirements.txt`` files. Even today, ``pyproject_ops`` continues to support the old convention while also accommodating ``pyproject.toml`` and ``poetry``. This versatility enables me to write less code when automating Python development workflows.
 
 
 How to Use
 ------------------------------------------------------------------------------
+
+
+Use as a CLI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. code-block:: bash
 
-    pip install pyproject_ops
-    pyops --help
+    $ pip install pyproject_ops
+    $ pyops --help
+    NAME
+        pyops - python project ops command line interface.
+
+    SYNOPSIS
+        pyops COMMAND | <flags>
+
+    DESCRIPTION
+        python project ops command line interface.
+
+    FLAGS
+        -v, --version=VERSION
+            Type: bool
+            Default: False
+
+    COMMANDS
+        COMMAND is one of the following:
+
+         build_doc
+           ** 📔 Build documentation website locally
+
+         build_doc_only
+           📔 Build documentation website locally without checking doc dependencies
+
+         bump_version
+           🔼 Bump semantic version.
+
+         cov
+           ** 🧪 Run code coverage test
+
+         cov_only
+           🧪 Run code coverage test without checking test dependencies
+
+         deploy_latest_doc
+           🚀 📔 Deploy Documentation Site To S3 as Latest Doc
+
+         deploy_versioned_doc
+           🚀 📔 Deploy Documentation Site To S3 as Versioned Doc
+
+         install
+           ** 💾 Install main dependencies and Package itself
+
+         install_all
+           ** 💾 💻 🧪 📔 🤖 Install All Dependencies
+
+         install_automation
+           💾 🤖 Install Dependencies for Automation Script
+
+         install_dev
+           💾 💻 Install Development Dependencies
+
+         install_doc
+           💾 📔 Install Document Dependencies
+
+         install_test
+           💾 🧪 Install Test Dependencies
+
+         int
+           ** 🧪 Run integration test
+
+         int_only
+           🧪 Run integration test without checking test dependencies
+
+         poetry_export
+           Export requirements-*.txt from poetry.lock file
+
+         poetry_lock
+           ** Resolve dependencies using poetry, update poetry.lock file
+
+         publish
+           📦 Publish package to PyPI
+
+         test
+           ** 🧪 Run test
+
+         test_only
+           🧪 Run test without checking test dependencies
+
+         venv_create
+           ** 🐍 Create Virtual Environment
+
+         venv_remove
+           ** 🗑 🐍 Remove Virtual Environment
+
+         view_cov
+           👀 🧪 View coverage test output html file locally in web browser.
+
+         view_doc
+           ** 👀 📔 View documentation website locally
+
+         view_latest_doc
+           👀 📔 View the latest documentation website on S3
+
+
+Use as a Python library
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: python
+
+    >>> from pyproject_ops.api import PyProjectOps
+    >>> pyops = PyProjectOps.from_pyproject_toml("pyproject.toml")
+    >>> pyops.create_virtualenv()
+    >>> pyops.pip_install_all()
+    >>> pyops.poetry_lock()
+    >>> pyops.poetry_install_all()
+    >>> pyops.run_cov_test()
+    >>> pyops.view_cov()
+    >>> pyops.build_doc()
+    >>> pyops.view_cov()
+    >>> pyops.python_build()
+    >>> pyops.twine_upload()
 
 
 Folder Structure
 ------------------------------------------------------------------------------
-Below is the folder structured used in ``pyproject_ops``. The first item is the relative path from the project root directory. The second item is the attribute name that you can use to access the path in ``pyproject_ops``. The third item is the description of the path.
+Below is the folder structured used in ``pyproject_ops``. The first item is the relative path from the project root directory. The second item is the attribute name that you can use to access the path in ``pyproject_ops``. The third item is the description of the path. You can find a concrete example at `HERE <https://github.com/MacHu-GWU/cookiecutter-pyproject/tree/main/%7B%7B%20cookiecutter.package_name%20%7D%7D-project>`_
 
 - ``.venv``: ``PyProjectOps.dir_venv``, The virtualenv directory.
 - ``.venv/bin``: ``PyProjectOps.dir_venv_bin``, The bin folder in virtualenv.

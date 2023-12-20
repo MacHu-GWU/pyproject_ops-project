@@ -19,7 +19,7 @@ except ImportError:  # pragma: no cover
     except ImportError:
         has_tomllib = False
 
-from pathlib_mate import Path
+from pathlib_mate import Path, T_PATH_ARG
 
 from .helpers import identify_py_major_and_minor_version
 
@@ -31,17 +31,10 @@ if T.TYPE_CHECKING:  # pragma: no cover
 class PyProjectToml:
     """
     Namespace class for accessing important paths.
-
-    :param dir_project_root: The root directory of the project, it is usually
-        the git root directory. It has to have a ``pyproject.toml`` file or
-        ``setup.py`` in it.
-    :param package_name: The name of the Python package you are working on.
-        There has to be a folder with the same name under ``dir_project_root``,
-        And it has to have a ``__init__.py`` file in it.
     """
 
     @classmethod
-    def from_pyproject_toml(cls, path_pyproject_toml: Path):
+    def from_pyproject_toml(cls, path_pyproject_toml: T_PATH_ARG):
         """
         Create the PyProjectOps instance from ``pyproject.toml`` file by reading
         the package name and python version information from it.
@@ -52,6 +45,7 @@ class PyProjectToml:
         """
         if has_tomllib is False:
             raise ImportError("tomli is required to parse pyproject.toml")
+        path_pyproject_toml = Path(path_pyproject_toml)
         toml_dict = tomllib.loads(path_pyproject_toml.read_text())
         package_name = toml_dict["tool"]["poetry"]["name"]
         package_version = toml_dict["tool"]["poetry"]["version"]

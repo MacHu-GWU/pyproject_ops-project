@@ -15,6 +15,16 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.7.2 (2023-12-19)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Minor Improvements**
+
+- add the optional ``prefix`` argument to ``pyproject.api.PyProjectOps.deploy_versioned_doc``, ``pyproject.api.PyProjectOps.deploy_latest_doc``, ``pyproject.api.PyProjectOps.view_latest_doc`` method.
+- now the CLI will print help information if you type ``pyops`` without any arguments.
+- now the ``pyproject.api.PyProjectOps.from_pyproject_toml()`` method can take a string as input.
+- add man page to ``README.rst``
+
+
 0.7.1 (2023-12-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
