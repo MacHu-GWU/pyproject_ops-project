@@ -235,6 +235,14 @@ class Command:
             dry_run=dry_run,
         )
 
+    def build(self, dry_run: bool = False):
+        """
+        🏗 Build distribution package locally
+        """
+        pyops.pip_install(dry_run=dry_run)
+        pyops.pip_install_dev(dry_run=dry_run)
+        pyops.python_build(dry_run=dry_run)
+
     def publish(self, dry_run: bool = False):
         """
         📦 Publish package to PyPI

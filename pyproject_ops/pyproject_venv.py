@@ -109,9 +109,9 @@ class PyProjectVenv:
         :return: a boolean flat to indicate whether a deletion is performed.
         """
         if self.dir_venv.exists():
-            if dry_run is True:
-                return False
-            shutil.rmtree(f"{self.dir_venv}", ignore_errors=True)
+            print(f"run command: rm -r {self.dir_venv}")
+            if dry_run is False:
+                shutil.rmtree(f"{self.dir_venv}", ignore_errors=True)
             return True
         else:
             return False
