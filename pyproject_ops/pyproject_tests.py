@@ -8,8 +8,10 @@ import typing as T
 import subprocess
 import dataclasses
 
-from .operation_system import OPEN_COMMAND
 from .vendor.emoji import Emoji
+
+from .operation_system import OPEN_COMMAND
+from .helpers import print_command
 
 if T.TYPE_CHECKING:  # pragma: no cover
     from .ops import PyProjectOps
@@ -28,8 +30,6 @@ class PyProjectTests:
         """
         A wrapper of ``pytest`` command to run unit test.
         """
-        if dry_run is True:
-            return
         args = [
             f"{self.path_venv_bin_pytest}",
             f"{self.dir_tests}",
@@ -37,7 +37,9 @@ class PyProjectTests:
             f"--rootdir={self.dir_project_root}",
         ]
         with self.dir_project_root.temp_cwd():
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def run_unit_test(
         self: "PyProjectOps",
@@ -59,8 +61,6 @@ class PyProjectTests:
         """
         A wrapper of ``pytest`` command to run code coverage test.
         """
-        if dry_run is True:
-            return
         args = [
             f"{self.path_venv_bin_pytest}",
             "-s",
@@ -74,7 +74,9 @@ class PyProjectTests:
             f"{self.dir_tests}",
         ]
         with self.dir_project_root.temp_cwd():
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def run_cov_test(
         self: "PyProjectOps",
@@ -98,9 +100,9 @@ class PyProjectTests:
 
         It is usually at the ``${dir_project_root}/htmlcov/index.html``
         """
-        if dry_run is True:
-            return
-        subprocess.run([OPEN_COMMAND, f"{self.path_htmlcov_index_html}"])
+        args = [OPEN_COMMAND, f"{self.path_htmlcov_index_html}"]
+        if dry_run is False:
+            subprocess.run(args)
 
     def view_cov(
         self: "PyProjectOps",
@@ -122,8 +124,6 @@ class PyProjectTests:
         """
         A wrapper of ``pytest`` command to run integration test.
         """
-        if dry_run is True:
-            return
         args = [
             f"{self.path_venv_bin_pytest}",
             f"{self.dir_tests_int}",
@@ -131,7 +131,9 @@ class PyProjectTests:
             f"--rootdir={self.dir_project_root}",
         ]
         with self.dir_project_root.temp_cwd():
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def run_int_test(
         self: "PyProjectOps",
@@ -153,8 +155,6 @@ class PyProjectTests:
         """
         A wrapper of ``pytest`` command to run load test.
         """
-        if dry_run is True:
-            return
         args = [
             f"{self.path_venv_bin_pytest}",
             f"{self.dir_tests_load}",
@@ -162,7 +162,9 @@ class PyProjectTests:
             f"--rootdir={self.dir_project_root}",
         ]
         with self.dir_project_root.temp_cwd():
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def run_load_test(
         self: "PyProjectOps",

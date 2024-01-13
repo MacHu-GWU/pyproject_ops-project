@@ -32,14 +32,14 @@ class PyProjectBuild:
         Build python source distribution using
         `pypa-build <https://pypa-build.readthedocs.io/en/latest/>`_.
         """
-        if dry_run is True:
-            return
         if self.dir_dist.exists():
-            shutil.rmtree(self.dir_dist, ignore_errors=True)
+            if dry_run is False:
+                shutil.rmtree(self.dir_dist, ignore_errors=True)
         build_dist_with_python_build(
             dir_project_root=self.dir_project_root,
             path_bin_python=self.path_venv_bin_python,
             verbose=True,
+            dry_run=dry_run,
         )
 
     def python_build(
@@ -64,14 +64,14 @@ class PyProjectBuild:
 
         `poetry build <https://python-poetry.org/docs/cli/#build>`_.
         """
-        if dry_run is True:
-            return
         if self.dir_dist.exists():
-            shutil.rmtree(self.dir_dist, ignore_errors=True)
+            if dry_run is False:
+                shutil.rmtree(self.dir_dist, ignore_errors=True)
         build_dist_with_poetry_build(
             dir_project_root=self.dir_project_root,
             path_bin_poetry=self.path_bin_poetry,
             verbose=True,
+            dry_run=dry_run,
         )
 
     def poetry_build(

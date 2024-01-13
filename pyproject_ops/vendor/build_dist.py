@@ -31,6 +31,7 @@ def temp_cwd(path: T.Union[str, Path]):
 def build_dist_with_python(
     dir_project_root: T.Union[str, Path],
     path_bin_python: T.Union[str, Path],
+    dry_run: bool = False,
     verbose: bool = False,
 ):
     """
@@ -55,12 +56,15 @@ def build_dist_with_python(
             "bdist_wheel",
             "--universal",
         ]
-        subprocess.run(args, check=True, capture_output=not verbose)
+        print("run command: {}".format(" ".join(args)))
+        if dry_run is False:
+            subprocess.run(args, check=True, capture_output=not verbose)
 
 
 def build_dist_with_python_build(
     dir_project_root: T.Union[str, Path],
     path_bin_python: T.Union[str, Path],
+    dry_run: bool = False,
     verbose: bool = False,
 ):
     """
@@ -84,12 +88,15 @@ def build_dist_with_python_build(
             "--sdist",
             "--wheel",
         ]
-        subprocess.run(args, check=True, capture_output=not verbose)
+        print("run command: {}".format(" ".join(args)))
+        if dry_run is False:
+            subprocess.run(args, check=True, capture_output=not verbose)
 
 
 def build_dist_with_poetry_build(
     dir_project_root: T.Union[str, Path],
     path_bin_poetry: T.Union[str, Path],
+    dry_run: bool = False,
     verbose: bool = False,
 ):
     """
@@ -109,4 +116,6 @@ def build_dist_with_poetry_build(
         ]
         if verbose is False:
             args.append("--quiet")
-        subprocess.run(args, check=True)
+        print("run command: {}".format(" ".join(args)))
+        if dry_run is False:
+            subprocess.run(args, check=True)

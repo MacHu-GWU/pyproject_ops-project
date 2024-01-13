@@ -9,7 +9,7 @@ import subprocess
 import dataclasses
 from textwrap import dedent
 
-from .helpers import bump_version
+from .helpers import bump_version, print_command
 
 if T.TYPE_CHECKING:
     from .ops import PyProjectOps
@@ -21,7 +21,10 @@ class PyProjectPublish:
     Namespace class for publishing to Python repository related automation.
     """
 
-    def twine_upload(self: "PyProjectOps"):
+    def twine_upload(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Publish to PyPI repository using
         `twine upload <https://twine.readthedocs.io/en/stable/index.html>`_.
@@ -32,9 +35,14 @@ class PyProjectPublish:
             f"{self.dir_dist}/*",
         ]
         with self.dir_project_root.temp_cwd():
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
-    def poetry_publish(self: "PyProjectOps"):
+    def poetry_publish(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         Publish to PyPI repository using
         `poetry publish <https://python-poetry.org/docs/libraries/#publishing-to-pypi>`_.`
@@ -44,7 +52,9 @@ class PyProjectPublish:
             "publish",
         ]
         with self.dir_project_root.temp_cwd():
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def bump_version(
         self: "PyProjectOps",
@@ -53,6 +63,7 @@ class PyProjectPublish:
         patch: bool = False,
         minor_start_from: int = 0,
         micro_start_from: int = 0,
+        dry_run: bool = False,
     ):
         """
         Bump a semantic version. The current version has to be in x.y.z format,
@@ -85,7 +96,8 @@ class PyProjectPublish:
         """
         ).strip()
         version_py_content = version_py_content.format(new_version)
-        self.path_version_py.write_text(version_py_content)
+        if dry_run is False:
+            self.path_version_py.write_text(version_py_content)
 
         # update pyproject.toml file
         if self.path_pyproject_toml.exists():
@@ -103,4 +115,6 @@ class PyProjectPublish:
                     "version",
                     action,
                 ]
-                subprocess.run(args, check=True)
+                print_command(args)
+                if dry_run is False:
+                    subprocess.run(args, check=True)

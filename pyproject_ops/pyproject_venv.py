@@ -9,8 +9,10 @@ import shutil
 import subprocess
 import dataclasses
 
-from .logger import logger
 from .vendor.emoji import Emoji
+
+from .logger import logger
+from .helpers import print_command
 
 if T.TYPE_CHECKING:  # pragma: no cover
     from .ops import PyProjectOps
@@ -52,20 +54,19 @@ class PyProjectVenv:
 
         :return: a boolean flat to indicate whether a creation is performed.
         """
-        if dry_run is True:
-            return False
         if self.dir_venv.exists():
             return False
         else:
-            subprocess.run(
-                [
-                    f"{self.path_bin_virtualenv}",
-                    "-p",
-                    f"python{self.python_version}",
-                    f"{self.dir_venv}",
-                ],
-                check=True,
-            )
+            args = [
+                f"{self.path_bin_virtualenv}",
+                "-p",
+                f"python{self.python_version}",
+                f"{self.dir_venv}",
+            ]
+            print_command(args)
+            if dry_run is True:
+                return False
+            subprocess.run(args, check=True)
             return True
 
     def create_virtualenv(
@@ -107,9 +108,9 @@ class PyProjectVenv:
 
         :return: a boolean flat to indicate whether a deletion is performed.
         """
-        if dry_run is True:
-            return False
         if self.dir_venv.exists():
+            if dry_run is True:
+                return False
             shutil.rmtree(f"{self.dir_venv}", ignore_errors=True)
             return True
         else:

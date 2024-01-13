@@ -10,8 +10,10 @@ import shutil
 import dataclasses
 import subprocess
 
-from .operation_system import OPEN_COMMAND
 from .vendor.emoji import Emoji
+
+from .operation_system import OPEN_COMMAND
+from .helpers import print_command
 
 if T.TYPE_CHECKING:  # pragma: no cover
     from .ops import PyProjectOps
@@ -32,11 +34,11 @@ class PyProjectDocs:
         necessary environment variables so that the ``make html`` command
         can build the HTML successfully.
         """
-        if dry_run is True:
-            return
-
-        shutil.rmtree(f"{self.dir_sphinx_doc_build}", ignore_errors=True)
-        shutil.rmtree(f"{self.dir_sphinx_doc_source_python_lib}", ignore_errors=True)
+        if dry_run is False:
+            shutil.rmtree(f"{self.dir_sphinx_doc_build}", ignore_errors=True)
+            shutil.rmtree(
+                f"{self.dir_sphinx_doc_source_python_lib}", ignore_errors=True
+            )
 
         # this allows the ``make html`` command knows which python virtualenv to use
         # see more information at: https://docs.python.org/3/library/venv.html
@@ -50,7 +52,9 @@ class PyProjectDocs:
             f"{self.dir_sphinx_doc}",
             "html",
         ]
-        subprocess.run(args)
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args)
 
     def build_doc(
         self: "PyProjectOps",
@@ -74,9 +78,10 @@ class PyProjectDocs:
 
         It is usually at the ``${dir_project_root}/build/html/index.html``
         """
-        if dry_run is True:
-            return
-        subprocess.run([OPEN_COMMAND, f"{self.path_sphinx_doc_build_index_html}"])
+        args = [OPEN_COMMAND, f"{self.path_sphinx_doc_build_index_html}"]
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args)
 
     def view_doc(
         self: "PyProjectOps",
@@ -104,9 +109,6 @@ class PyProjectDocs:
         The S3 bucket has to enable static website hosting. The document site
         will be uploaded to ``s3://${bucket}/${prefix}${package_name}/${package_version}/``
         """
-        if dry_run is True:
-            return
-
         args = [
             f"{self.path_bin_aws}",
             "s3",
@@ -116,7 +118,9 @@ class PyProjectDocs:
         ]
         if aws_profile:
             args.extend(["--profile", aws_profile])
-        subprocess.run(args, check=True)
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args, check=True)
 
     def deploy_versioned_doc(
         self: "PyProjectOps",
@@ -150,9 +154,6 @@ class PyProjectDocs:
         The S3 bucket has to enable static website hosting. The document site
         will be uploaded to ``s3://${bucket}/${prefix}${package_name}/latest/``
         """
-        if dry_run is True:
-            return
-
         args = [
             f"{self.path_bin_aws}",
             "s3",
@@ -162,7 +163,9 @@ class PyProjectDocs:
         ]
         if aws_profile:
             args.extend(["--profile", aws_profile])
-        subprocess.run(args, check=True)
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args, check=True)
 
     def deploy_latest_doc(
         self: "PyProjectOps",
@@ -195,14 +198,14 @@ class PyProjectDocs:
         Here's a sample document site url
         https://my-bucket.s3.amazonaws.com/my-prefix/my_package/latest/index.html
         """
-        if dry_run is True:
-            return
         url = (
             f"https://{bucket}.s3.amazonaws.com/{prefix}{self.package_name}"
             f"/latest/{self.path_sphinx_doc_build_index_html.basename}"
         )
         args = [OPEN_COMMAND, url]
-        subprocess.run(args, check=True)
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args, check=True)
 
     def view_latest_doc(
         self: "PyProjectOps",

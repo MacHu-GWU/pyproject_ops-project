@@ -100,3 +100,8 @@ def bump_version(
         raise NotImplementedError
 
     return f"{major_ver}.{minor_ver}.{micro_ver}"
+
+
+def print_command(args: T.List[str]):
+    cmd = " ".join(args)
+    print(f"run command: {cmd}")

@@ -12,9 +12,11 @@ import subprocess
 import dataclasses
 from pathlib_mate import Path
 
-from .helpers import sha256_of_bytes
-from .logger import logger
 from .vendor.emoji import Emoji
+
+from .logger import logger
+from .helpers import sha256_of_bytes, print_command
+
 
 if T.TYPE_CHECKING:
     from .ops import PyProjectOps
@@ -57,11 +59,11 @@ class PyProjectDeps:
 
         - poetry lock: https://python-poetry.org/docs/cli/#lock
         """
-        if dry_run is True:
-            return
         with self.dir_project_root.temp_cwd():
             args = [f"{self.path_bin_poetry}", "lock"]
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def poetry_lock(
         self: "PyProjectOps",
@@ -91,11 +93,11 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        if dry_run is True:
-            return
         with self.dir_project_root.temp_cwd():
             args = [f"{self.path_bin_poetry}", "install"]
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def poetry_install(
         self: "PyProjectOps",
@@ -125,12 +127,11 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        if dry_run is True:
-            return
         with self.dir_project_root.temp_cwd():
-            subprocess.run(
-                [f"{self.path_bin_poetry}", "install", "--with", "dev"], check=True
-            )
+            args = [f"{self.path_bin_poetry}", "install", "--with", "dev"]
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def poetry_install_dev(
         self: "PyProjectOps",
@@ -160,12 +161,11 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        if dry_run is True:
-            return
         with self.dir_project_root.temp_cwd():
-            subprocess.run(
-                [f"{self.path_bin_poetry}", "install", "--with", "test"], check=True
-            )
+            args = [f"{self.path_bin_poetry}", "install", "--with", "test"]
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def poetry_install_test(
         self: "PyProjectOps",
@@ -195,12 +195,11 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        if dry_run is True:
-            return
         with self.dir_project_root.temp_cwd():
-            subprocess.run(
-                [f"{self.path_bin_poetry}", "install", "--with", "doc"], check=True
-            )
+            args = [f"{self.path_bin_poetry}", "install", "--with", "doc"]
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def poetry_install_doc(
         self: "PyProjectOps",
@@ -232,8 +231,6 @@ class PyProjectDeps:
 
         - poetry install: https://python-poetry.org/docs/cli/#install
         """
-        if dry_run is True:
-            return
         args = [
             f"{self.path_venv_bin_pip}",
             "install",
@@ -241,11 +238,17 @@ class PyProjectDeps:
             f"{self.path_requirements_automation}",
         ]
         _quite_pip_install(args)
-        subprocess.run(args, check=True)
-        subprocess.run([f"{self.path_bin_poetry}", "install"], check=True)
-        subprocess.run(
-            [f"{self.path_bin_poetry}", "install", "--with", "dev,test,doc"], check=True
-        )
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args, check=True)
+        args = [f"{self.path_bin_poetry}", "install"]
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args, check=True)
+        args = [f"{self.path_bin_poetry}", "install", "--with", "dev,test,doc"]
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args, check=True)
 
     def poetry_install_all(
         self: "PyProjectOps",
@@ -301,6 +304,7 @@ class PyProjectDeps:
     def _poetry_export_main(
         self: "PyProjectOps",
         with_hash: bool = True,
+        dry_run: bool = False,
     ):
         """
         Export main dependencies to the requirements.txt file.
@@ -319,14 +323,17 @@ class PyProjectDeps:
         ]
         if with_hash is False:
             args.append("--without-hashes")
+        print_command(args)
         with self.dir_project_root.temp_cwd():
-            subprocess.run(args, check=True)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def _poetry_export_group(
         self: "PyProjectOps",
         group: str,
         path: Path,
         with_hash: bool = True,
+        dry_run: bool = False,
     ):
         """
         Export dependency group to given file.
@@ -338,7 +345,8 @@ class PyProjectDeps:
         :param with_hash: whether to include the hash of the dependencies in the
             requirements.txt file.
         """
-        path.remove_if_exists()
+        if dry_run is False:
+            path.remove_if_exists()
         with self.dir_project_root.temp_cwd():
             args = [
                 f"{self.path_bin_poetry}",
@@ -352,12 +360,15 @@ class PyProjectDeps:
             if with_hash is False:
                 args.append("--without-hashes")
             args.append(group)
-            subprocess.run(args, check=True)
+            print_command(args)
+            if dry_run is False:
+                subprocess.run(args, check=True)
 
     def _poetry_export_logic(
         self: "PyProjectOps",
         current_poetry_lock_hash: str,
         with_hash: bool = True,
+        dry_run: bool = False,
     ):
         """
         Run ``poetry export --format requirements.txt ...`` command and write
@@ -368,7 +379,7 @@ class PyProjectDeps:
             requirements.txt file.
         """
         # export the main dependencies
-        self._poetry_export_main(with_hash=with_hash)
+        self._poetry_export_main(with_hash=with_hash, dry_run=dry_run)
 
         # export dev, test, doc, auto dependencies
         for group, path in [
@@ -377,22 +388,23 @@ class PyProjectDeps:
             ("doc", self.path_requirements_doc),
             ("auto", self.path_requirements_automation),
         ]:
-            self._poetry_export_group(group, path, with_hash=with_hash)
+            self._poetry_export_group(group, path, with_hash=with_hash, dry_run=dry_run)
 
         # write the ``poetry.lock`` hash to the cache file
-        self.path_poetry_lock_hash_json.write_text(
-            json.dumps(
-                {
-                    "hash": current_poetry_lock_hash,
-                    "description": (
-                        "DON'T edit this file manually! This file is the cache of "
-                        "the poetry.lock file hash. It is used to avoid unnecessary "
-                        "expansive 'poetry export ...' command."
-                    ),
-                },
-                indent=4,
+        if dry_run is False:
+            self.path_poetry_lock_hash_json.write_text(
+                json.dumps(
+                    {
+                        "hash": current_poetry_lock_hash,
+                        "description": (
+                            "DON'T edit this file manually! This file is the cache of "
+                            "the poetry.lock file hash. It is used to avoid unnecessary "
+                            "expansive 'poetry export ...' command."
+                        ),
+                    },
+                    indent=4,
+                )
             )
-        )
 
     def _poetry_export(
         self: "PyProjectOps",
@@ -401,11 +413,9 @@ class PyProjectDeps:
         """
         :return: ``True`` if ``poetry export`` is executed, ``False`` if not.
         """
-        if dry_run is True:
-            return False
         poetry_lock_hash = sha256_of_bytes(self.path_poetry_lock.read_bytes())
         if self._do_we_need_poetry_export(poetry_lock_hash):
-            self._poetry_export_logic(poetry_lock_hash)
+            self._poetry_export_logic(poetry_lock_hash, dry_run=dry_run)
             return True
         else:
             return False
@@ -435,7 +445,10 @@ class PyProjectDeps:
         else:
             return self._poetry_export(dry_run=dry_run)
 
-    def _try_poetry_export(self: "PyProjectOps"):
+    def _try_poetry_export(
+        self: "PyProjectOps",
+        dry_run: bool = False,
+    ):
         """
         This is a silent version of :func:`poetry_export`. It is called before
         running ``pip install -r requirements-***.txt`` command. It ensures that
@@ -446,12 +459,19 @@ class PyProjectDeps:
 
         poetry_lock_hash = sha256_of_bytes(self.path_poetry_lock.read_bytes())
         if self._do_we_need_poetry_export(poetry_lock_hash):
-            self._poetry_export_logic(poetry_lock_hash)
+            self._poetry_export_logic(poetry_lock_hash, dry_run=dry_run)
 
-    def _run_pip_install(self, args: T.List[str], quiet: bool):
+    def _run_pip_install(
+        self: "PyProjectOps",
+        args: T.List[str],
+        quiet: bool,
+        dry_run: bool = False,
+    ):
         if quiet:
             _quite_pip_install(args)
-        subprocess.run(args, check=True)
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args, check=True)
 
     def _pip_install(
         self: "PyProjectOps",
@@ -469,10 +489,7 @@ class PyProjectDeps:
 
         - pip install: https://pip.pypa.io/en/stable/cli/pip_install/#options
         """
-        if dry_run is True:
-            return
-
-        self._try_poetry_export()
+        self._try_poetry_export(dry_run=dry_run)
 
         args = [
             f"{self.path_venv_bin_pip}",
@@ -481,7 +498,7 @@ class PyProjectDeps:
             f"{self.dir_project_root}",
             "--no-deps",
         ]
-        self._run_pip_install(args, quiet)
+        self._run_pip_install(args, quiet, dry_run=dry_run)
 
         args = [
             f"{self.path_venv_bin_pip}",
@@ -489,7 +506,7 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements}",
         ]
-        self._run_pip_install(args, quiet)
+        self._run_pip_install(args, quiet, dry_run=dry_run)
 
     def pip_install(
         self: "PyProjectOps",
@@ -518,10 +535,7 @@ class PyProjectDeps:
 
             pip install -r requirements-dev.txt
         """
-        if dry_run is True:
-            return
-
-        self._try_poetry_export()
+        self._try_poetry_export(dry_run=dry_run)
 
         args = [
             f"{self.path_venv_bin_pip}",
@@ -529,7 +543,7 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements_dev}",
         ]
-        self._run_pip_install(args, quiet)
+        self._run_pip_install(args, quiet, dry_run=dry_run)
 
     def pip_install_dev(
         self: "PyProjectOps",
@@ -558,10 +572,7 @@ class PyProjectDeps:
 
             pip install -r requirements-test.txt
         """
-        if dry_run is True:
-            return
-
-        self._try_poetry_export()
+        self._try_poetry_export(dry_run=dry_run)
 
         args = [
             f"{self.path_venv_bin_pip}",
@@ -569,7 +580,7 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements_test}",
         ]
-        self._run_pip_install(args, quiet)
+        self._run_pip_install(args, quiet, dry_run=dry_run)
 
     def pip_install_test(
         self: "PyProjectOps",
@@ -598,10 +609,7 @@ class PyProjectDeps:
 
             pip install -r requirements-doc.txt
         """
-        if dry_run is True:
-            return
-
-        self._try_poetry_export()
+        self._try_poetry_export(dry_run=dry_run)
 
         args = [
             f"{self.path_venv_bin_pip}",
@@ -609,7 +617,7 @@ class PyProjectDeps:
             "-r",
             f"{self.path_requirements_doc}",
         ]
-        self._run_pip_install(args, quiet)
+        self._run_pip_install(args, quiet, dry_run=dry_run)
 
     def pip_install_doc(
         self: "PyProjectOps",
@@ -638,16 +646,13 @@ class PyProjectDeps:
 
             pip install -r requirements-automation.txt
         """
-        if dry_run is True:
-            return
-
         args = [
             f"{self.path_venv_bin_pip}",
             "install",
             "-r",
             f"{self.path_requirements_automation}",
         ]
-        self._run_pip_install(args, quiet)
+        self._run_pip_install(args, quiet, dry_run=dry_run)
 
     def pip_install_automation(
         self: "PyProjectOps",
@@ -680,10 +685,7 @@ class PyProjectDeps:
             pip install -r requirements-doc.txt
             pip install -r requirements-automation.txt
         """
-        if dry_run is True:
-            return
-
-        self._try_poetry_export()
+        self._try_poetry_export(dry_run=dry_run)
 
         args = [
             f"{self.path_venv_bin_pip}",
@@ -692,7 +694,9 @@ class PyProjectDeps:
             f"{self.dir_project_root}",
             "--no-deps",
         ]
-        subprocess.run(args, check=True)
+        print_command(args)
+        if dry_run is False:
+            subprocess.run(args, check=True)
 
         for path in [
             self.path_requirements,
@@ -702,7 +706,7 @@ class PyProjectDeps:
             self.path_requirements_automation,
         ]:
             args = [f"{self.path_venv_bin_pip}", "install", "-r", f"{path}"]
-            self._run_pip_install(args, quiet)
+            self._run_pip_install(args, quiet, dry_run=dry_run)
 
     def pip_install_all(
         self: "PyProjectOps",
@@ -733,9 +737,6 @@ class PyProjectDeps:
         - aws-glue-libs: https://github.com/awslabs/aws-glue-libs
         - VCS Support - Git: https://pip.pypa.io/en/stable/topics/vcs-support/#git
         """
-        if dry_run is True:
-            return
-
         glue_version_to_git_tag_mapper = {
             "4.0": "v4.0",
             "3.0": "v3.0",
@@ -748,7 +749,7 @@ class PyProjectDeps:
             "install",
             f"git+https://github.com/awslabs/aws-glue-libs.git@{git_tag}",
         ]
-        self._run_pip_install(args, quiet)
+        self._run_pip_install(args, quiet, dry_run=dry_run)
 
     def pip_install_awsglue(
         self: "PyProjectOps",
