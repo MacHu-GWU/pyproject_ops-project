@@ -15,6 +15,14 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.8.1 (2023-01-13)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add ``pyops build`` command.
+- add ``--dry-run`` flag to most of command. if dry run is True, then only print the underlying command to run, but taking no effect.
+
+
 0.7.2 (2023-12-19)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Minor Improvements**

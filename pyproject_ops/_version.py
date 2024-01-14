@@ -1,4 +1,4 @@
-__version__ = "0.7.2"
+__version__ = "0.8.1"
 
 # keep this ``if __name__ == "__main__"``, don't delete!
 # this is used by automation script to detect the project version
